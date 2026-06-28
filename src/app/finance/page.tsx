@@ -176,14 +176,14 @@ export default function FinancePage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="flex-1 premium-card rounded-xl overflow-hidden flex flex-col"
+        className="flex-1 premium-card rounded-xl overflow-hidden flex flex-col min-h-0"
       >
-        <div className="px-6 py-5 border-b border-outline-variant/30 bg-surface-container/20 flex justify-between items-center">
+        <div className="px-6 py-5 border-b border-outline-variant/30 bg-surface-container/20 flex justify-between items-center shrink-0">
           <h3 className="text-sm font-bold text-on-surface">Detailed Billing Breakdown</h3>
           <span className="text-xs text-on-surface-variant/50 font-medium">May 1 - May 31, 2026</span>
         </div>
         
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto min-h-0">
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
               <tr className="bg-surface-container/30 text-[10px] text-on-surface-variant/50 uppercase tracking-wider font-bold border-b border-outline-variant/30">
@@ -213,7 +213,7 @@ export default function FinancePage() {
             </tbody>
           </table>
         </div>
-        <div className="p-4 border-t border-outline-variant/30 bg-surface-container/20 flex justify-between items-center">
+        <div className="p-4 border-t border-outline-variant/30 bg-surface-container/20 flex justify-between items-center shrink-0">
           <span className="text-sm font-semibold text-on-surface-variant/60">Total Cloud Compute & Inference Operations</span>
           <span className="text-xl font-bold gradient-text">$54,246.90</span>
         </div>

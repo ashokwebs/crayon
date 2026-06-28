@@ -8,18 +8,25 @@ export default function FeedbackPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [feedback, setFeedback] = useState("");
+  const [transmissionType, setTransmissionType] = useState("Bug Report / Core System Failure");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!feedback.trim()) return;
     
     setIsSubmitting(true);
-    // Simulate API call
+    
+    // Construct the mailto link
+    const subject = encodeURIComponent(`Crayon OS Feedback: ${transmissionType}`);
+    const body = encodeURIComponent(`Intelligence Report:\n\n${feedback}\n\n---\nSent from Crayon OS`);
+    window.location.href = `mailto:ashokashishms@gmail.com?subject=${subject}&body=${body}`;
+
+    // Show success state
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
       setFeedback("");
-    }, 1200);
+    }, 800);
   };
 
   return (
@@ -60,7 +67,11 @@ export default function FeedbackPage() {
             
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-2">Transmission Type</label>
-              <select className="w-full bg-surface-container border border-outline-variant/50 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-indigo-500/50 appearance-none">
+              <select 
+                value={transmissionType}
+                onChange={(e) => setTransmissionType(e.target.value)}
+                className="w-full bg-surface-container border border-outline-variant/50 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-indigo-500/50 appearance-none"
+              >
                 <option>Bug Report / Core System Failure</option>
                 <option>Feature Request (Executive Council)</option>
                 <option>AICOO Database Integration Issue</option>
