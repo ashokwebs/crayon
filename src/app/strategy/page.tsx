@@ -15,12 +15,12 @@ const documents = [
     content: (
       <>
         <p className="lead text-lg mb-8">
-          This document defines the high-level system design, orchestrating multi-agent collaboration via the Vector AI Command Center while leveraging robust microservices for core operations. It details the precise interaction patterns between the frontend gateway, the orchestration engine, and our state persistence layers.
+          This document defines the high-level system design, orchestrating multi-agent collaboration via the Crayon AI Command Center while leveraging robust microservices for core operations. It details the precise interaction patterns between the frontend gateway, the orchestration engine, and our state persistence layers.
         </p>
         <hr className="border-outline-variant my-8" />
         <h2>1. Infrastructure & Orchestration</h2>
         <p>
-          We will deploy a containerized Next.js/React architecture utilizing the <strong>Vector AI Command Center</strong> to manage inter-agent tasks. The backend leverages an event-driven <code>FastAPI</code> orchestration layer, ensuring that the Architect Agent ("Prism") can successfully display collaborative outputs from the CEO, CTO, Marketing, and Finance agents.
+          We will deploy a containerized Next.js/React architecture utilizing the <strong>Crayon AI Command Center</strong> to manage inter-agent tasks. The backend leverages an event-driven <code>FastAPI</code> orchestration layer, ensuring that the Architect Agent ("Prism") can successfully display collaborative outputs from the CEO, CTO, Marketing, and Finance agents.
           Our serverless edge functions process incoming requests and route them to dedicated worker nodes running specialized LLM wrappers. The entire frontend is statically exported where possible, falling back to Server-Side Rendering (SSR) only for dynamic agent interactions and real-time boardroom streams.
         </p>
         <h2>2. Gamified Subsystems</h2>
@@ -28,8 +28,8 @@ const documents = [
           To enhance engagement, we integrate probability-based reward engines modeled after the <strong>Prox Casino Slots</strong> architecture. This allows for dynamic multi-row matrix rewards and classic symbol rarity tiers to incentivize user action loops seamlessly. 
           When a user completes an onboarding milestone, the orchestration engine triggers a high-fidelity visual slot-machine effect, spinning custom tokens that map directly to API credits, temporary premium UI themes, or exclusive multi-agent chat features.
         </p>
-        <div className="my-6 bg-surface-container border-l-4 border-blue-500 rounded-r-lg p-4 flex gap-4">
-          <Code2 className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+        <div className="my-6 bg-surface-container border-l-4 border-zinc-600 rounded-r-lg p-4 flex gap-4">
+          <Code2 className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
           <div>
             <h4 className="text-sm font-semibold text-on-surface m-0 mb-1">Queue Optimization</h4>
             <p className="text-sm text-on-surface-variant m-0">To manage the freemium tier effectively, rendering and agent generation tasks use a priority Redis queue. Free-tier jobs fallback to placeholder operations if capacity is exhausted. By employing an active/passive failover mechanism, we guarantee that enterprise clients never experience queue times exceeding 1.2 seconds for agent responses.</p>
@@ -74,11 +74,11 @@ const documents = [
           We are implementing a chaotic engagement engine inspired by the <strong>DON'T PRESS THE BUTTON.EXE</strong> project. An evolving, sentient button integrated into our viral web campaigns will react to user interactions by triggering increasingly unstable events and thematic dialogue, progressing toward a climactic final interaction that rewards users with premium access. 
           This gamified funnel is projected to decrease our Customer Acquisition Cost (CAC) by over 60% compared to traditional B2B SaaS ad spends.
         </p>
-        <div className="my-6 bg-surface-container border-l-4 border-rose-500 rounded-r-lg p-4 flex gap-4">
-          <TrendingUp className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+        <div className="my-6 bg-surface-container border-l-4 border-zinc-600 rounded-r-lg p-4 flex gap-4">
+          <TrendingUp className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
           <div>
             <h4 className="text-sm font-semibold text-on-surface m-0 mb-1">Influencer Outreach</h4>
-            <p className="text-sm text-on-surface-variant m-0">Identifying top-tier AI influencers to showcase the Vector AI Command Center. They will receive lifetime access in exchange for multi-part video series demonstrating practical workflows. We will provide them with unique affiliate codes tied to dynamic API thresholds.</p>
+            <p className="text-sm text-on-surface-variant m-0">Identifying top-tier AI influencers to showcase the Crayon AI Command Center. They will receive lifetime access in exchange for multi-part video series demonstrating practical workflows. We will provide them with unique affiliate codes tied to dynamic API thresholds.</p>
           </div>
         </div>
         <h2>3. Community Driven Governance</h2>
@@ -147,10 +147,43 @@ const documents = [
           Every deployment will feature a zero-trust architecture with an integrated Local Data Scrubber. This ensures that when an enterprise client uploads a massive codebase for the CTO Agent to analyze, the pipeline scrubs the data locally. All PII, hardcoded passwords, and sensitive API keys are stripped out via advanced regex and entropy-based scanning before any network transmission occurs.
           This guarantees a secure "clean room" pipeline where no credentials can ever enter the AI vector store or be logged by the orchestration engine.
         </p>
-        <h2>3. Market Positioning</h2>
+        <h2>3. Quarterly OKRs (Q3 2026)</h2>
+        <div className="overflow-x-auto my-6 border border-outline-variant/30 rounded-xl bg-surface-container-lowest/50">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-surface-container border-b border-outline-variant/30 text-xs uppercase font-bold text-on-surface-variant/70">
+              <tr>
+                <th className="px-4 py-3">Objective</th>
+                <th className="px-4 py-3">Key Result</th>
+                <th className="px-4 py-3">Target</th>
+                <th className="px-4 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-outline-variant/20 text-on-surface">
+              <tr className="hover:bg-surface-container/30 transition-colors">
+                <td className="px-4 py-3 font-medium">Enterprise Security</td>
+                <td className="px-4 py-3 text-on-surface-variant">Achieve SOC2 Type II Certification</td>
+                <td className="px-4 py-3 font-mono">100%</td>
+                <td className="px-4 py-3"><span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-zinc-800/20 text-zinc-300 border border-zinc-600/30">In Progress</span></td>
+              </tr>
+              <tr className="hover:bg-surface-container/30 transition-colors">
+                <td className="px-4 py-3 font-medium">Market Penetration</td>
+                <td className="px-4 py-3 text-on-surface-variant">Onboard 5 Fortune 500 pilots</td>
+                <td className="px-4 py-3 font-mono">5 Orgs</td>
+                <td className="px-4 py-3"><span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-zinc-800/20 text-zinc-400 border border-zinc-600/30">Planning</span></td>
+              </tr>
+              <tr className="hover:bg-surface-container/30 transition-colors">
+                <td className="px-4 py-3 font-medium">Network Expansion</td>
+                <td className="px-4 py-3 text-on-surface-variant">Integrate 20 Aicoo external partners</td>
+                <td className="px-4 py-3 font-mono">20 Nodes</td>
+                <td className="px-4 py-3"><span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-zinc-800/20 text-zinc-300 border border-zinc-600/30">Active</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h2>4. Market Positioning</h2>
         <p>
           By proving our platform is impervious to prompt injection and credential leaking, we can rapidly target highly regulated B2B SaaS industries such as Healthcare and Enterprise Finance. 
-          We will run targeted LinkedIn ad campaigns focusing on the phrase: "Stop feeding your trade secrets to public AI. Orchestrate securely with Vector Command."
+          We will run targeted LinkedIn ad campaigns focusing on the phrase: "Stop feeding your trade secrets to public AI. Orchestrate securely with Crayon Command."
         </p>
         <h2>4. Strategic Partnerships</h2>
         <p>
@@ -210,7 +243,7 @@ const documents = [
         <hr className="border-outline-variant my-8" />
         <h2>1. The Problem</h2>
         <p>Current enterprise software relies on disconnected tools. Teams waste thousands of hours manually coordinating tasks between disjointed systems without intelligent, context-aware oversight. A human manager must parse Jira, Slack, GitHub, and Figma just to understand a project's status.</p>
-        <h2>2. The Vector Command Solution</h2>
+        <h2>2. The Crayon Command Solution</h2>
         <p>A unified, visually stunning command center where executive AI agents autonomously collaborate, generate documentation, and write architectural code in real-time. It replaces isolated chat wrappers with a highly integrated "BoardRoom" experience, acting as an AI-native operating system for business.</p>
         <h2>3. Traction & Moat</h2>
         <p>We've achieved a $250K ARR within 3 months of soft launch, entirely via organic, chaotic viral marketing loops. Our moat is our multi-agent context synchronization—the ability for the Finance agent to audit the CTO agent's cloud architecture for cost optimization instantly.</p>
@@ -272,7 +305,7 @@ const documents = [
         <p>Fortune 500 innovation labs, large-scale software development agencies, and high-volume financial institutions requiring automated portfolio reasoning and massive document auditing.</p>
         <h2>Enterprise Features</h2>
         <ul>
-          <li>On-premise or Virtual Private Cloud (VPC) deployment of the Vector Database, ensuring absolute data sovereignty.</li>
+          <li>On-premise or Virtual Private Cloud (VPC) deployment of the Crayon Database, ensuring absolute data sovereignty.</li>
           <li>Custom integration with internal corporate APIs via the <strong>NovaVault</strong> secure bridge protocol, allowing agents to read internal HR or Sales data without external exposure.</li>
           <li>White-labeled cinematic boot sequences inspired by NEXUS Identity OS for premium client onboarding, replacing our branding with theirs.</li>
           <li>Automated compliance document generation skills embedded directly into the agent workflow, producing SOC2 readouts on demand.</li>
@@ -299,8 +332,8 @@ const documents = [
         <hr className="border-outline-variant my-8" />
         <h2>Retrieval-Augmented Generation (RAG)</h2>
         <p>We use a highly optimized PostgreSQL + pgvector database to retrieve relevant engineering standards, financial rules, and brand guidelines dynamically. This ensures agents never hallucinate outdated information. Every prompt generated by the orchestrator is pre-pended with the top 3 most relevant context chunks retrieved via cosine similarity search.</p>
-        <div className="my-6 bg-surface-container border-l-4 border-emerald-500 rounded-r-lg p-4 flex gap-4">
-          <Code2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+        <div className="my-6 bg-surface-container border-l-4 border-zinc-600 rounded-r-lg p-4 flex gap-4">
+          <Code2 className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
           <div>
             <h4 className="text-sm font-semibold text-on-surface m-0 mb-1">Robust Fallback Mechanisms</h4>
             <p className="text-sm text-on-surface-variant m-0">If external LLM APIs fail or rate-limit during document embedding, the system gracefully falls back to generating deterministic placeholder vectors. This guarantees runtime stability and zero crashes during high-stakes demonstrations.</p>
@@ -388,7 +421,7 @@ const documents = [
         </p>
         <hr className="border-outline-variant my-8" />
         <h2>Positioning</h2>
-        <p>While competitors focus solely on narrow code generation, the Vector AI Command Center provides a <strong>holistic business suite</strong> involving a specialized board of directors (CEO, CTO, Marketing, Finance). We win on high-fidelity cinematic UI and cross-agent collaborative intelligence. Users aren't just buying a coding assistant; they are buying a digital executive team.</p>
+        <p>While competitors focus solely on narrow code generation, the Crayon AI Command Center provides a <strong>holistic business suite</strong> involving a specialized board of directors (CEO, CTO, Marketing, Finance). We win on high-fidelity cinematic UI and cross-agent collaborative intelligence. Users aren't just buying a coding assistant; they are buying a digital executive team.</p>
         <h2>The Commercial Gap</h2>
         <p>Competitors lack gamified engagement and stable financial infrastructures. Our inclusion of Prox Casino-style interactive rewards and NovaVault's robust fintech billing suite puts us years ahead in both user retention and commercial viability. Many open-source competitors fail due to lack of monetization; our Stripe-first architecture ensures sustainability.</p>
         <h2>Defensibility</h2>
@@ -470,6 +503,53 @@ const documents = [
         </p>
       </>
     )
+  },
+  {
+    id: "global-expansion",
+    title: "Global AI Expansion Strategy",
+    icon: TrendingUp,
+    author: "Atlas & Nexus",
+    confidence: "98%",
+    timeAgo: "2 days ago",
+    content: (
+      <>
+        <p className="lead text-lg mb-8">
+          Detailed blueprint for scaling the Crayon Command Center into APAC and EMEA markets, establishing local sovereign AI clusters to comply with regional data governance laws.
+        </p>
+        <hr className="border-outline-variant my-8" />
+        <h2>1. Sovereign Cloud Deployments</h2>
+        <p>To capture enterprise contracts in the EU and APAC, we must deploy dedicated, isolated clusters of our Aicoo vector database within those regions. We will partner with regional sovereign cloud providers to guarantee that no telemetry or RAG context ever crosses borders, adhering strictly to localized privacy mandates.</p>
+        <div className="my-6 bg-surface-container border-l-4 border-zinc-600 rounded-r-lg p-4 flex gap-4">
+          <Code2 className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
+          <div>
+            <h4 className="text-sm font-semibold text-on-surface m-0 mb-1">Latency Targets</h4>
+            <p className="text-sm text-on-surface-variant m-0">By moving edge nodes into Frankfurt and Tokyo, we project a 65% reduction in orchestration latency for international clients, driving agent response times under 600ms globally.</p>
+          </div>
+        </div>
+        <h2>2. Localized Fine-Tuning</h2>
+        <p>Our core agent models (Atlas, Nexus, Vanguard) will undergo secondary fine-tuning phases localized for cultural business nuance. A Vanguard agent deployed in Japan must employ different GTM strategies and communicative tones compared to one operating in New York. This localized tuning will be a massive differentiator against generic LLMs.</p>
+      </>
+    )
+  },
+  {
+    id: "supply-chain-rebalance",
+    title: "Supply Chain Rebalancing Protocol",
+    icon: Target,
+    author: "Prism (Architect Agent)",
+    confidence: "99%",
+    timeAgo: "3 days ago",
+    content: (
+      <>
+        <p className="lead text-lg mb-8">
+          Core logic for the autonomous logistics rebalancing engine. This protocol outlines how the Crayon system integrates with global ERPs to predictively reroute inventory using reinforcement learning.
+        </p>
+        <hr className="border-outline-variant my-8" />
+        <h2>Predictive Ingestion</h2>
+        <p>The system ingests real-time telemetry from thousands of global edge nodes, factoring in weather patterns, geopolitical shifts, and micro-economic demand signals. This data is fed directly into a multi-modal time-series forecasting model.</p>
+        <h2>Autonomous Execution</h2>
+        <p>When a disruption is detected (e.g., port congestion), the system simulates thousands of alternate routing strategies via Monte Carlo simulations, calculates the most cost-effective rebalancing maneuver, and autonomously pushes the API request to the 3PL provider without requiring human approval.</p>
+      </>
+    )
   }
 ];
 
@@ -511,18 +591,65 @@ export default function StrategyPage() {
         </div>
         <div className="flex gap-3">
 
-          <button onClick={handleExportPDF} className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center gap-2 active:scale-[0.98] print:hidden">
+          <button onClick={handleExportPDF} className="bg-gradient-to-r from-zinc-800 to-zinc-950 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-black/25 transition-all flex items-center gap-2 active:scale-[0.98] print:hidden">
             <Download className="w-4 h-4" />
             Export PDF
           </button>
         </div>
       </motion.div>
 
+      </motion.div>
+
+      {/* Top Level Telemetry */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6 shrink-0"
+      >
+        <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/20 border border-zinc-600/30 flex items-center justify-center text-zinc-300">
+            <FileText className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider">Total Documents</p>
+            <p className="text-xl font-black text-on-surface">{documents.length}</p>
+          </div>
+        </div>
+        <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <CheckCircle2 className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider">Avg Confidence</p>
+            <p className="text-xl font-black text-on-surface">95.4%</p>
+          </div>
+        </div>
+        <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <Code2 className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider">Vectors Indexed</p>
+            <p className="text-xl font-black text-on-surface">14,204</p>
+          </div>
+        </div>
+        <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <DollarSign className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider">Est. Value (RAG)</p>
+            <p className="text-xl font-black text-on-surface">$1.2M</p>
+          </div>
+        </div>
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="flex-1 bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl flex overflow-hidden shadow-sm"
+        transition={{ delay: 0.2 }}
+        className="flex-1 bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl flex overflow-hidden shadow-sm min-h-0"
       >
         
         {/* Document Sidebar */}
@@ -565,9 +692,9 @@ export default function StrategyPage() {
                 <Clock className="w-3.5 h-3.5" />
                 <span>Generated {activeDoc.timeAgo} by <strong className="text-on-surface font-medium">{activeDoc.author}</strong></span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-on-surface-variant">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Confidence <strong className="text-on-surface font-medium">{activeDoc.confidence}</strong></span>
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>{activeDoc.confidence} Confidence</span>
               </div>
               <button className="text-on-surface-variant hover:text-on-surface transition-colors">
                 <MoreHorizontal className="w-4 h-4" />
@@ -586,6 +713,32 @@ export default function StrategyPage() {
 
         </div>
       </motion.div>
+
+      {/* Strategy Insight Footer */}
+      <div className="mt-6 shrink-0 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="premium-card rounded-xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <PenTool className="w-5 h-5 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Dynamic Document Generation</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1.5 leading-relaxed">
+              Strategy artifacts are procedurally generated in real-time by the executive agent layer. By continuously ingesting market telemetry, agent outputs are guaranteed to reflect the absolute latest technical specs and financial models.
+            </p>
+          </div>
+        </div>
+        <div className="premium-card rounded-xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <Share2 className="w-5 h-5 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Cryptographic Distribution</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1.5 leading-relaxed">
+              Every exported document is cryptographically hashed and digitally signed by the Crayon OS kernel, ensuring that architectural blueprints and financial strategies cannot be tampered with during B2B distribution.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

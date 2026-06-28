@@ -45,23 +45,23 @@ export default function ActivityPage() {
       >
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-on-surface mb-1 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-zinc-800 to-zinc-950 flex items-center justify-center text-white shadow-lg shadow-black/20">
               <History className="w-5 h-5" />
             </div>
             Activity Log
           </h2>
           <p className="text-sm text-on-surface-variant/70 max-w-2xl">
-            Review past agent orchestrations, architecture plans, and executive strategies saved in the InsForge database.
+            Review past agent orchestrations, architecture plans, and executive strategies saved in the Aicoo database.
           </p>
         </div>
       </motion.div>
 
       {loading ? (
         <div className="flex items-center justify-center p-20">
-          <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-zinc-300" />
         </div>
       ) : error ? (
-        <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-4 rounded-xl flex items-center gap-3">
+        <div className="bg-zinc-800/10 border border-zinc-600/20 text-zinc-300 p-4 rounded-xl flex items-center gap-3">
           <AlertCircle className="w-5 h-5" />
           <p>{error}</p>
         </div>
@@ -74,41 +74,94 @@ export default function ActivityPage() {
       ) : (
         <div className="space-y-6">
           {sessions.map((session) => (
-            <div key={session._id} className="bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
-              <div className="p-4 bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+            <div key={session._id} className="premium-card rounded-xl shadow-sm overflow-hidden">
+              <div className="p-4 bg-surface-container-low border-b border-outline-variant/30 flex justify-between items-center">
                 <div className="flex items-center gap-3">
-                  <span className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wide ${
-                    session.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                  <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                    session.status === 'completed' ? 'bg-zinc-800/10 text-zinc-300 border border-zinc-600/20' : 'bg-surface-container-high text-on-surface-variant'
                   }`}>
                     {session.status}
                   </span>
-                  <span className="text-xs font-mono text-on-surface-variant">{session.session_id}</span>
+                  <span className="text-[11px] font-mono text-on-surface-variant/60 flex items-center gap-1">
+                    <Target className="w-3 h-3" />
+                    ID: {session.session_id}
+                  </span>
+                </div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/40 flex items-center gap-1">
+                  <History className="w-3 h-3" />
+                  Telemetry Logged
                 </div>
               </div>
               
-              <div className="p-6">
-                <div className="mb-6">
-                  <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Original Idea</h4>
-                  <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/50 text-sm text-on-surface">
+              <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-1 border-r border-outline-variant/20 pr-6">
+                  <h4 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">Strategic Directive</h4>
+                  <div className="bg-surface-container-lowest/50 p-4 rounded-xl border border-outline-variant/30 text-sm text-on-surface leading-relaxed">
                     {session.idea}
+                  </div>
+                  
+                  <div className="mt-6 space-y-3">
+                    <h4 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Execution Pipeline</h4>
+                    <div className="flex items-center gap-2 text-xs text-on-surface-variant/70">
+                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" /> Aicoo Vector Memory
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-on-surface-variant/70">
+                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" /> Prism (Architect)
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-on-surface-variant/70">
+                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" /> Executive Layer Routing
+                    </div>
                   </div>
                 </div>
 
-                {session.final_strategy && (
-                  <div>
-                    <h4 className="text-xs font-bold text-emerald-500 uppercase tracking-wider mb-2">Final Executed Strategy</h4>
-                    <div className="bg-surface-container-lowest p-6 rounded-lg border border-emerald-500/20 text-sm text-on-surface shadow-inner max-h-[400px] overflow-y-auto markdown-content [&>p]:mb-3 [&>ul]:list-disc [&>ul]:pl-5 [&>h3]:text-base [&>h3]:font-bold [&>h3]:mt-4 [&>h3]:mb-2">
+                <div className="lg:col-span-2">
+                  <h4 className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 shadow-[0_0_4px_rgba(161,161,170,0.5)]" />
+                    Synthesized Strategy Output
+                  </h4>
+                  {session.final_strategy ? (
+                    <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/40 text-sm text-on-surface max-h-[400px] overflow-y-auto markdown-content">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {session.final_strategy}
                       </ReactMarkdown>
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <div className="flex items-center justify-center h-32 bg-surface-container-lowest/30 rounded-xl border border-outline-variant/30 text-on-surface-variant text-sm">
+                      Processing directive...
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      {/* Activity Insight Footer */}
+      <div className="mt-8 shrink-0 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="premium-card rounded-xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <History className="w-5 h-5 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Immutable Telemetry</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1.5 leading-relaxed">
+              Every orchestration session is cryptographically logged into the centralized audit trail. This ensures absolute traceability for compliance (SOC2) and provides executive agents with a unified history of strategic decisions.
+            </p>
+          </div>
+        </div>
+        <div className="premium-card rounded-xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <Target className="w-5 h-5 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Vectorized Recall</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1.5 leading-relaxed">
+              Completed strategies are automatically indexed into the Aicoo vector store. This allows agents to seamlessly cross-reference past architectures when generating new, complex B2B workflow solutions.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

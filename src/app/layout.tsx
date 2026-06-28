@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vector | AI Business Command Center",
+  title: "Crayon | AI Business Command Center",
   description: "Coordinate autonomous AI agents to strategize, build, and scale your startup.",
 };
 

@@ -1,38 +1,56 @@
-import { NextResponse } from 'next/server';
-import { getDbPool, initDb } from '@/lib/db';
+import { NextResponse } from "next/server";
+import { initDb, ProjectModel } from "@/lib/db";
 
-let dbInitialized = false;
-
-export async function DELETE(
-  request: Request,
+export async function GET(
+  req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-
   try {
-    if (!dbInitialized) {
-      await initDb();
-      dbInitialized = true;
+    await initDb();
+    
+    // Find project by ID
+    const project = await ProjectModel.findById(id);
+
+    if (!project) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    const pool = getDbPool();
-    if (!pool) throw new Error("Database not connected");
+    return NextResponse.json({
+      id: project._id.toString(),
+      title: project.title,
+      description: project.description,
+      status: project.status,
+      created_at: project.created_at,
+      summary_markdown: project.summary_markdown,
+      architecture_markdown: project.architecture_markdown,
+      marketing_markdown: project.marketing_markdown,
+      finance_markdown: project.finance_markdown,
+      chat_history: project.chat_history ? JSON.parse(project.chat_history) : []
+    });
+  } catch (error: any) {
+    console.error("Failed to fetch project:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
 
-    const numericId = id.replace('db-', '');
-    if (!numericId || isNaN(Number(numericId))) {
-      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  try {
+    await initDb();
+    
+    const result = await ProjectModel.findByIdAndDelete(id);
+    
+    if (!result) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
-
-    // Protect the original 6 seed projects
-    if (Number(numericId) <= 6) {
-      return NextResponse.json({ error: "Cannot delete built-in demo projects." }, { status: 403 });
-    }
-
-    await pool.query('DELETE FROM projects WHERE id = $1', [numericId]);
-
+    
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to delete project:", error);
-    return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

@@ -9,7 +9,7 @@ const DOC_ICONS: Record<string, React.ReactNode> = {
   'Architecture & Security Spec': <ShieldCheck className="w-5 h-5" />,
   'EdTech Market Analysis': <LineChart className="w-5 h-5" />,
   '5-Year Revenue Model': <Code2 className="w-5 h-5" />,
-  'Project Vector — Master Execution Plan': <Presentation className="w-5 h-5 text-violet-500" />
+  'Project Crayon — Master Execution Plan': <Presentation className="w-5 h-5 text-zinc-300" />
 };
 
 function PaletteIcon() {
@@ -44,18 +44,18 @@ export function DeliverablePanel({ events }: { events: DemoEvent[] }) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               className={`p-3 rounded-xl border flex items-center gap-3 group ${
                 doc.agentId === 'prism' 
-                  ? 'bg-violet-500/10 border-violet-500/30' 
+                  ? 'bg-zinc-800/10 border-zinc-600/30' 
                   : 'bg-surface-container-low border-outline-variant/30 hover:bg-surface-container hover:border-outline-variant/60'
               }`}
             >
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                doc.agentId === 'prism' ? 'bg-violet-500/20' : 'bg-surface-container-high'
+                doc.agentId === 'prism' ? 'bg-zinc-800/20' : 'bg-surface-container-high'
               }`}>
                 {DOC_ICONS[doc.message || ''] || <FileText className="w-5 h-5" />}
               </div>
               
               <div className="flex-1 min-w-0">
-                <p className={`text-sm font-bold truncate ${doc.agentId === 'prism' ? 'text-violet-400' : 'text-on-surface'}`}>
+                <p className={`text-sm font-bold truncate ${doc.agentId === 'prism' ? 'text-zinc-300' : 'text-on-surface'}`}>
                   {doc.message}
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">

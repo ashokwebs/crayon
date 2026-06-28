@@ -45,7 +45,7 @@ const initialMockFiles = [
     {
       id: 7,
       filename: "Engineering_Handbook.txt",
-      content: "Vector AI Command Center Engineering Standards:\n- Backend: Next.js App Router (Node.js/Edge)\n- Database: InsForge PostgreSQL with pgvector\n- Styling: Tailwind CSS with emerald/teal gradients\n- Architecture: Event-driven microservices\nAll code must be reviewed by the Nexus agent before deployment.",
+      content: "Crayon AI Command Center Engineering Standards:\n- Backend: Next.js App Router (Node.js/Edge)\n- Database: Aicoo PostgreSQL with pgvector\n- Styling: Tailwind CSS with emerald/teal gradients\n- Architecture: Event-driven microservices\nAll code must be reviewed by the Nexus agent before deployment.",
       created_at: new Date(baseDate - 3000000).toISOString()
     },
     {
@@ -53,6 +53,18 @@ const initialMockFiles = [
       filename: "Brand_Guidelines_2026.md",
       content: "# Brand Guidelines\n\n**Voice:** Professional, authoritative, and concise.\n**Primary Colors:** Emerald Green (#10b981), Teal (#0f766e)\n**Secondary Colors:** Indigo (#4f46e5)\n**Font:** Inter for UI, Fira Code for code blocks.\nNever use the word 'Fake' in any public-facing materials.",
       created_at: new Date(baseDate - 1000000).toISOString()
+    },
+    {
+      id: 9,
+      filename: "Aicoo_B2B_Integration_API.json",
+      content: "{\n  \"version\": \"1.4.2\",\n  \"endpoint\": \"wss://aicoo.network/v1/stream\",\n  \"auth_method\": \"Ed25519_Signatures\",\n  \"rate_limit\": \"50000_req_per_sec\",\n  \"description\": \"Core WebSockets schema for Aicoo cross-org communication. Agents must emit payload with valid 'intent_hash'.\"\n}",
+      created_at: new Date(baseDate - 500000).toISOString()
+    },
+    {
+      id: 10,
+      filename: "Employee_Onboarding_Handbook.pdf",
+      content: "Crayon OS - Executive Layer Onboarding\n\nWelcome to Crayon. Our autonomous agents handle 99% of operations, meaning human employees act exclusively in supervisory or creative director roles. \n\nKey Directives:\n1. Never override Prism (Architect Agent) during an active deploy without consensus.\n2. Do not feed unverified raw data into the Aicoo vector store.\n3. All strategic pivots must be discussed in the Board Room.",
+      created_at: new Date(baseDate - 250000).toISOString()
     }
 ];
 
@@ -126,13 +138,13 @@ export default function KnowledgeBasePage() {
       >
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-on-surface mb-1 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-zinc-700 to-zinc-950 flex items-center justify-center text-white shadow-lg shadow-zinc-500/20">
               <Database className="w-5 h-5" />
             </div>
             Knowledge Base
           </h2>
           <p className="text-sm text-on-surface-variant/70 max-w-2xl mt-2">
-            Upload company documents, playbooks, and guidelines. Prism uses RAG (Retrieval-Augmented Generation) via InsForge pgvector to read these before executing orchestrations.
+            Upload company documents, playbooks, and guidelines. Prism uses RAG (Retrieval-Augmented Generation) via Aicoo pgvector to read these before executing orchestrations.
           </p>
         </div>
         
@@ -140,7 +152,7 @@ export default function KnowledgeBasePage() {
           <button
             onClick={handleSeedDocuments}
             disabled={seeding || uploading}
-            className="flex items-center gap-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-500 border border-indigo-500/20 px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 bg-zinc-500/10 hover:bg-zinc-500/20 text-zinc-300 border border-zinc-500/20 px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50"
           >
             {seeding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
             {seeding ? "Seeding..." : "Add Sample Data"}
@@ -148,14 +160,14 @@ export default function KnowledgeBasePage() {
           
           <div className="relative group flex-1 md:flex-none">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-on-surface-variant group-focus-within:text-indigo-500 transition-colors" />
+              <Search className="h-4 w-4 text-on-surface-variant group-focus-within:text-zinc-300 transition-colors" />
             </div>
             <input
               type="text"
               placeholder="Search documents..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="block w-full md:w-64 pl-10 pr-3 py-2 border border-outline-variant rounded-lg leading-5 bg-surface-container placeholder-on-surface-variant/50 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all"
+              className="block w-full md:w-64 pl-10 pr-3 py-2 border border-outline-variant rounded-lg leading-5 bg-surface-container placeholder-on-surface-variant/50 focus:outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 sm:text-sm transition-all"
             />
           </div>
         </div>
@@ -168,7 +180,7 @@ export default function KnowledgeBasePage() {
           <div className="bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden h-full">
             <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-lowest">
               <h3 className="text-lg font-bold text-on-surface flex items-center gap-2">
-                <UploadCloud className="w-5 h-5 text-indigo-500" /> Upload Context
+                <UploadCloud className="w-5 h-5 text-zinc-300" /> Upload Context
               </h3>
             </div>
             
@@ -182,21 +194,21 @@ export default function KnowledgeBasePage() {
                   onChange={handleFileUpload} 
                   disabled={uploading}
                 />
-                <div className="w-16 h-16 rounded-full bg-indigo-500/10 text-indigo-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-16 h-16 rounded-full bg-zinc-500/10 text-zinc-300 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   {uploading ? <Loader2 className="w-8 h-8 animate-spin" /> : <Save className="w-8 h-8" />}
                 </div>
                 <span className="text-base font-bold text-on-surface mb-2">
-                  {uploading ? "Vectorizing Document..." : "Click or Drag to Upload"}
+                  {uploading ? "Crayonizing Document..." : "Click or Drag to Upload"}
                 </span>
                 <span className="text-xs text-on-surface-variant">Supports .txt, .md, .csv (Max 5MB)</span>
               </div>
 
-              <div className="mt-6 bg-indigo-500/5 border border-indigo-500/20 rounded-lg p-4">
-                <h4 className="text-xs font-bold text-indigo-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+              <div className="mt-6 bg-zinc-500/5 border border-zinc-500/20 rounded-lg p-4">
+                <h4 className="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2 flex items-center gap-2">
                   <Shield className="w-4 h-4" /> Security Note
                 </h4>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  Documents uploaded here are embedded using Gemini text-embedding-004 and securely stored in the InsForge PostgreSQL vector database. Row-level security guarantees data isolation.
+                  Documents uploaded here are embedded using Gemini text-embedding-004 and securely stored in the Aicoo PostgreSQL vector database. Row-level security guarantees data isolation.
                 </p>
               </div>
             </div>
@@ -208,10 +220,10 @@ export default function KnowledgeBasePage() {
           <div className="bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden min-h-[450px]">
             <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-lowest flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface flex items-center gap-2">
-                <Database className="w-5 h-5 text-emerald-500" /> Vectorized Database
+                <Database className="w-5 h-5 text-zinc-300" /> Crayonized Database
               </h3>
-              <span className="text-xs font-bold bg-emerald-500/10 text-emerald-500 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                {files.length} Vectors
+              <span className="text-xs font-bold bg-zinc-800/10 text-zinc-300 px-2.5 py-1 rounded-full border border-zinc-600/20">
+                {files.length} Crayons
               </span>
             </div>
 
@@ -240,8 +252,8 @@ export default function KnowledgeBasePage() {
                       <tr key={`${file.id}-${idx}`} className="hover:bg-surface-container-lowest transition-colors">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded bg-blue-500/10 flex items-center justify-center">
-                              <FileText className="w-4 h-4 text-blue-500" />
+                            <div className="w-8 h-8 rounded bg-zinc-800/10 flex items-center justify-center">
+                              <FileText className="w-4 h-4 text-zinc-300" />
                             </div>
                             <span className="text-sm font-semibold text-on-surface">{file.filename}</span>
                           </div>
@@ -252,12 +264,12 @@ export default function KnowledgeBasePage() {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-right flex items-center justify-end gap-3">
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-300 bg-zinc-800/10 px-2 py-1 rounded border border-zinc-600/20">
                             <Cpu className="w-3 h-3" /> Indexed
                           </span>
                           <button
                             onClick={() => setSelectedFile(file)}
-                            className="p-1.5 text-on-surface-variant/50 hover:text-indigo-500 hover:bg-indigo-500/10 rounded-md transition-colors"
+                            className="p-1.5 text-on-surface-variant/50 hover:text-zinc-300 hover:bg-zinc-500/10 rounded-md transition-colors"
                             title="View Content"
                           >
                             <Eye className="w-4 h-4" />
@@ -284,8 +296,8 @@ export default function KnowledgeBasePage() {
           >
             <div className="flex items-center justify-between p-6 border-b border-outline-variant bg-surface-container-lowest">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-blue-500" />
+                <div className="w-10 h-10 rounded-xl bg-zinc-800/10 flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-zinc-300" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-on-surface leading-none">{selectedFile.filename}</h3>
@@ -324,6 +336,31 @@ export default function KnowledgeBasePage() {
           </motion.div>
         </div>
       )}
+      {/* Knowledge Base Insight Footer */}
+      <div className="mt-6 shrink-0 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="premium-card rounded-xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <Cpu className="w-5 h-5 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Vectorized RAG Ingestion</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1.5 leading-relaxed">
+              Uploaded documents are immediately parsed, chunked, and embedded into the Aicoo pgvector database using high-dimensional embedding models. This ensures absolute semantic accuracy when executive agents recall specific project guidelines during orchestration.
+            </p>
+          </div>
+        </div>
+        <div className="premium-card rounded-xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <Shield className="w-5 h-5 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Encrypted Data Isolation</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1.5 leading-relaxed">
+              All proprietary corporate knowledge is encrypted at rest (AES-256) and secured behind Row-Level Security (RLS) protocols. Vector similarities can only be queried by authenticated agents within your specific organizational workspace.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

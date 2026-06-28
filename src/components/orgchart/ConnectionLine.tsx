@@ -12,7 +12,7 @@ interface ConnectionLineProps {
   color?: string; // hex color for active state
 }
 
-export function ConnectionLine({ startX, startY, endX, endY, active, type = 'internal', color = '#10b981' }: ConnectionLineProps) {
+export function ConnectionLine({ startX, startY, endX, endY, active, type = 'internal', color = '#a1a1aa' }: ConnectionLineProps) {
   // SVG path generation (simple bezier curve for horizontal/vertical flow)
   const isHorizontal = Math.abs(startX - endX) > Math.abs(startY - endY);
   

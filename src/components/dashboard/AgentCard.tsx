@@ -40,18 +40,18 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 
 // Legacy name-based lookups (backwards compat for existing code)
 const legacyGradients: Record<string, string> = {
-  Atlas: 'from-emerald-400 to-teal-600',
-  Nexus: 'from-blue-400 to-indigo-600',
-  Prism: 'from-violet-400 to-purple-600',
-  Vanguard: 'from-amber-400 to-orange-600',
-  Ledger: 'from-indigo-400 to-violet-600',
+  Atlas: 'from-zinc-800 to-zinc-950',
+  Nexus: 'from-zinc-800 to-zinc-950',
+  Prism: 'from-zinc-800 to-zinc-950',
+  Vanguard: 'from-zinc-800 to-zinc-950',
+  Ledger: 'from-zinc-800 to-zinc-950',
 };
 const legacyGlows: Record<string, string> = {
-  Atlas: 'shadow-emerald-500/20',
-  Nexus: 'shadow-blue-500/20',
-  Prism: 'shadow-violet-500/20',
-  Vanguard: 'shadow-amber-500/20',
-  Ledger: 'shadow-indigo-500/20',
+  Atlas: 'shadow-zinc-500/20',
+  Nexus: 'shadow-zinc-500/20',
+  Prism: 'shadow-zinc-500/20',
+  Vanguard: 'shadow-zinc-500/20',
+  Ledger: 'shadow-zinc-500/20',
 };
 const legacyIcons: Record<string, React.ReactNode> = {
   Atlas: <Target className="w-4 h-4" />,
@@ -79,9 +79,9 @@ export function AgentCard({ agent, name, role, status, task, confidence, compact
     }
   };
 
-  const tierBadge = agent?.tier === 'architect' ? 'bg-violet-500/10 text-violet-500 border-violet-500/20' :
-    agent?.tier === 'executive' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-    agent?.tier === 'director' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' : '';
+  const tierBadge = agent?.tier === 'architect' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' :
+    agent?.tier === 'executive' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' :
+    agent?.tier === 'director' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' : '';
 
   if (compact) {
     return (
@@ -143,7 +143,7 @@ export function AgentCard({ agent, name, role, status, task, confidence, compact
               {agent.tier}
             </span>
           )}
-          <span className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-cyan-500/8 text-cyan-500 border border-cyan-500/15 flex items-center gap-1">
+          <span className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-zinc-800/8 text-zinc-300 border border-zinc-600/15 flex items-center gap-1">
             <Globe className="w-2.5 h-2.5" /> Aicoo
           </span>
         </div>

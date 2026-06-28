@@ -48,7 +48,7 @@ export default function OrgChartPage() {
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 flex justify-between items-end shrink-0 z-10 relative">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface mb-1 flex items-center gap-2">
-            <GitBranch className="w-6 h-6 text-violet-500" />
+            <GitBranch className="w-6 h-6 text-zinc-300" />
             Organizational Structure
           </h2>
           <p className="text-sm text-on-surface-variant/70 max-w-2xl">
@@ -56,10 +56,10 @@ export default function OrgChartPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Link href="/aicoo" className="bg-surface-container border border-cyan-500/30 text-cyan-500 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-cyan-500/10 transition-all flex items-center gap-2">
+          <Link href="/aicoo" className="bg-surface-container border border-zinc-600/30 text-zinc-300 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-zinc-800/10 transition-all flex items-center gap-2">
             <Globe className="w-4 h-4" /> Aicoo Network
           </Link>
-          <Link href="/demo" className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:shadow-lg transition-all flex items-center gap-2">
+          <Link href="/demo" className="bg-gradient-to-r from-zinc-800 to-zinc-950 text-white px-5 py-2 rounded-lg text-sm font-bold hover:shadow-lg transition-all flex items-center gap-2">
             <LayoutDashboard className="w-4 h-4" /> Run Live Demo
           </Link>
         </div>
@@ -119,7 +119,7 @@ export default function OrgChartPage() {
                   endX={orgX} endY={extY - 40}
                   active={isLineActive(sourceNodeId, org.id)}
                   type="external"
-                  color="#06b6d4" // Cyan for Aicoo
+                  color="#71717a" // Zinc for Aicoo
                 />
               );
             })}
@@ -172,11 +172,48 @@ export default function OrgChartPage() {
 
             {/* Aicoo Network Label */}
             <div className="absolute w-full flex justify-center pointer-events-none" style={{ top: extY - 100 }}>
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-surface/80 backdrop-blur text-cyan-500 text-xs font-bold uppercase tracking-[0.2em]">
+              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-600/30 bg-surface/80 backdrop-blur text-zinc-300 text-xs font-bold uppercase tracking-[0.2em]">
                 <Globe className="w-4 h-4" /> Aicoo Cross-Org Network
               </div>
             </div>
 
+          </div>
+        </div>
+      </div>
+
+      {/* Organizational Insight Footer */}
+      <div className="mt-6 shrink-0 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="premium-card rounded-xl p-4 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <GitBranch className="w-4 h-4 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Hierarchical Routing</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1">
+              Prism acts as the core orchestrator, directly dispatching strategic imperatives to Executive-level agents, which cascade execution down to Specialized Directors.
+            </p>
+          </div>
+        </div>
+        <div className="premium-card rounded-xl p-4 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <Globe className="w-4 h-4 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Aicoo Integration</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1">
+              External organization nodes dynamically map to your internal executives, establishing secure, cross-boundary context channels for autonomous SLA negotiation.
+            </p>
+          </div>
+        </div>
+        <div className="premium-card rounded-xl p-4 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <LayoutDashboard className="w-4 h-4 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Node Telemetry</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1">
+              Each node maintains an independent memory context and processing state, synchronized through the central Crayon OS Event Bus for absolute operational transparency.
+            </p>
           </div>
         </div>
       </div>

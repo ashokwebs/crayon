@@ -59,9 +59,9 @@ export function OrgNode({ id, type, x, y, status = 'idle', isActiveRouteTarget, 
         )}
 
         <div className={`relative w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-surface/90 backdrop-blur-sm border-2 flex items-center justify-center shadow-xl transition-colors ${
-          selected ? `border-${isAgent ? 'violet' : 'cyan'}-500 shadow-${isAgent ? 'violet' : 'cyan'}-500/30` :
-          isActiveRouteTarget ? 'border-cyan-500 shadow-cyan-500/40' :
-          status === 'communicating' ? 'border-emerald-500 shadow-emerald-500/20' :
+          selected ? `border-zinc-400 shadow-zinc-400/30` :
+          isActiveRouteTarget ? 'border-zinc-600 shadow-black/40' :
+          status === 'communicating' ? 'border-zinc-600 shadow-black/20' :
           'border-outline-variant/50 group-hover:border-outline-variant'
         }`}>
           <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-inner`}>
@@ -75,18 +75,24 @@ export function OrgNode({ id, type, x, y, status = 'idle', isActiveRouteTarget, 
           {/* Badge */}
           {!isAgent && (
             <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-surface border border-outline-variant flex items-center justify-center">
-              <Globe className="w-3 h-3 text-cyan-500" />
+              <Globe className="w-3 h-3 text-zinc-300" />
             </div>
           )}
           {status === 'communicating' && (
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 animate-pulse border-2 border-surface" />
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-zinc-800 animate-pulse border-2 border-surface" />
           )}
         </div>
       </div>
 
       <div className={`text-center transition-opacity ${selected || isActiveRouteTarget || status === 'communicating' ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>
         <p className="text-[11px] md:text-xs font-bold text-on-surface whitespace-nowrap">{name}</p>
-        <p className="text-[9px] md:text-[10px] text-on-surface-variant max-w-[100px] truncate">{subtitle}</p>
+        <p className="text-[9px] md:text-[10px] text-on-surface-variant max-w-[100px] truncate mb-1">{subtitle}</p>
+        {isAgent && (
+          <div className="flex items-center justify-center gap-1.5 opacity-80">
+            <span className="text-[8px] font-mono text-zinc-400 bg-zinc-800/50 px-1 rounded">CPU: {Math.floor(Math.random() * 40 + 20)}%</span>
+            <span className="text-[8px] font-mono text-zinc-400 bg-zinc-800/50 px-1 rounded">{Math.floor(Math.random() * 5 + 1)} Tasks</span>
+          </div>
+        )}
       </div>
     </motion.div>
   );

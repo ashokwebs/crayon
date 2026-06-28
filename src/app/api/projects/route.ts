@@ -1,29 +1,24 @@
 import { NextResponse } from "next/server";
-import { getDbPool, initDb } from "@/lib/db";
-
-let dbInitialized = false;
+import { initDb, ProjectModel } from "@/lib/db";
 
 export async function GET() {
   try {
-    if (!dbInitialized) {
-      await initDb();
-      dbInitialized = true;
-    }
+    await initDb();
 
-    const pool = getDbPool();
-    if (!pool) {
-      return NextResponse.json({ projects: [] }); // Graceful fallback
-    }
+    // Fetch projects using Mongoose
+    const projects = await ProjectModel.find().sort({ created_at: -1 });
 
-    const result = await pool.query(`
-      SELECT * FROM projects 
-      ORDER BY created_at DESC 
-      LIMIT 50
-    `);
+    const mapped = projects.map(p => ({
+      id: p._id.toString(),
+      title: p.title,
+      description: p.description,
+      status: p.status,
+      timestamp: p.created_at ? new Date(p.created_at).getTime() : Date.now()
+    }));
 
-    return NextResponse.json({ projects: result.rows });
-  } catch (error) {
-    console.error("Failed to fetch projects:", error);
-    return NextResponse.json({ projects: [] }, { status: 500 });
+    return NextResponse.json(mapped);
+  } catch (error: any) {
+    console.error("Failed to fetch projects from MongoDB:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

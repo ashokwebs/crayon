@@ -6,75 +6,51 @@ import { motion } from 'framer-motion';
 const upcomingProjects = [
   {
     id: 1,
-    name: "Project Quantum",
-    description: "Next-gen video rendering pipeline",
+    name: "SOC2 Compliance Sweep",
+    description: "Automated penetration testing across VPCs",
     status: "In Progress",
-    progress: 75,
+    progress: 88,
     dueDate: "Q3 2026",
     icon: Activity,
-    color: "text-blue-500",
-    bg: "bg-blue-500/10",
-    progressGradient: "from-blue-500 to-indigo-500",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
+    progressGradient: "from-zinc-500 to-zinc-300",
   },
   {
     id: 2,
-    name: "Nexus Redesign",
-    description: "Overhaul of the core user dashboard",
+    name: "Series A Deck Generation",
+    description: "Financial modeling & market projections",
     status: "Planning",
-    progress: 25,
+    progress: 35,
     dueDate: "Q4 2026",
     icon: Target,
-    color: "text-purple-500",
-    bg: "bg-purple-500/10",
-    progressGradient: "from-purple-500 to-violet-500",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
+    progressGradient: "from-zinc-500 to-zinc-300",
   },
   {
     id: 3,
-    name: "Vanguard Launch",
-    description: "Global marketing campaign execution",
+    name: "Enterprise SLA Drafting",
+    description: "Cross-referencing global legal frameworks",
     status: "Pending",
     progress: 0,
     dueDate: "Q1 2027",
     icon: Clock,
-    color: "text-amber-500",
-    bg: "bg-amber-500/10",
-    progressGradient: "from-amber-500 to-orange-500",
+    color: "text-zinc-400",
+    bg: "bg-zinc-800/10",
+    progressGradient: "from-zinc-800 to-zinc-950",
   },
   {
     id: 4,
-    name: "Ledger API Integration",
-    description: "Stripe and PayPal multi-currency support",
+    name: "AWS Zero-Trust Config",
+    description: "Multi-region database read replica setup",
     status: "Completed",
     progress: 100,
     dueDate: "Q2 2026",
     icon: CheckCircle2,
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
-    progressGradient: "from-emerald-500 to-teal-500",
-  },
-  {
-    id: 5,
-    name: "Atlas Data Lake",
-    description: "Enterprise user telemetry aggregation",
-    status: "In Progress",
-    progress: 60,
-    dueDate: "Q3 2026",
-    icon: Activity,
-    color: "text-cyan-500",
-    bg: "bg-cyan-500/10",
-    progressGradient: "from-cyan-500 to-blue-500",
-  },
-  {
-    id: 6,
-    name: "Prism NLU V2",
-    description: "Upgraded Natural Language Understanding",
-    status: "Planning",
-    progress: 10,
-    dueDate: "Q4 2026",
-    icon: Target,
-    color: "text-rose-500",
-    bg: "bg-rose-500/10",
-    progressGradient: "from-rose-500 to-pink-500",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
+    progressGradient: "from-zinc-500 to-zinc-300",
   }
 ];
 
@@ -83,11 +59,11 @@ export function OperationalInsights() {
     <section className="premium-card rounded-xl p-5 flex-1">
       <div className="flex justify-between items-center mb-6 pb-4 border-b border-outline-variant/30">
         <h3 className="text-base font-bold text-on-surface flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.4)]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 shadow-[0_0_6px_rgba(161,161,170,0.4)]" />
           Upcoming Projects
         </h3>
         <span className="text-[10px] font-bold text-on-surface-variant bg-surface-container-high/50 px-2.5 py-1 rounded-lg border border-outline-variant/50 uppercase tracking-wider">
-          6 Active
+          4 Active
         </span>
       </div>
 
@@ -119,10 +95,10 @@ export function OperationalInsights() {
                   {project.dueDate}
                 </span>
                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-                  project.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500' :
-                  project.status === 'In Progress' ? 'bg-blue-500/10 text-blue-500' :
-                  project.status === 'Planning' ? 'bg-purple-500/10 text-purple-500' :
-                  'bg-amber-500/10 text-amber-500'
+                  project.status === 'Completed' ? 'bg-zinc-800/10 text-zinc-300' :
+                  project.status === 'In Progress' ? 'bg-zinc-800/20 text-white' :
+                  project.status === 'Planning' ? 'bg-zinc-800/10 text-zinc-400' :
+                  'bg-zinc-800/10 text-zinc-500'
                 }`}>
                   {project.status}
                 </span>

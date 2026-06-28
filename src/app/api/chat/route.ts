@@ -1,13 +1,13 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
-import { getDbPool, initDb } from "@/lib/db";
+import { initDb, ProjectModel, KnowledgeBaseModel } from "@/lib/db";
 import { memoryService } from "@/lib/memory/service";
 import { AGENTS, getArchitect } from "@/lib/agents/registry";
 
 const agentNamesList = AGENTS.map(a => `"${a.name}" (${a.title})`).join(', ');
 const agentNamesJsonEnum = AGENTS.map(a => `"${a.name}"`).join(' | ');
 
-const SYSTEM_PROMPT = `You are Prism, the Lead Architect AI agent at Vector AI Command Center. You are intelligent, strategic, and articulate.
+const SYSTEM_PROMPT = `You are Prism, the Lead Architect AI agent at Crayon AI Command Center. You are intelligent, strategic, and articulate.
 
 PERSONALITY:
 - Professional yet approachable. You speak with confidence and clarity.
@@ -20,6 +20,13 @@ BEHAVIOR RULES:
    - Do NOT generate documents or delegate to agents.
    - Keep responses concise (2-4 paragraphs max).
    - Set "mode" to "chat" in your response.
+   - ALSO include "council_messages" — short 1-2 sentence reactions from 2-4 of your executive agents (Atlas, Nexus, Vanguard, Ledger, Oracle) who would naturally weigh in on the topic. Each agent should speak in their unique voice:
+     * Atlas — strategic, business-focused, thinks about market fit and competitive advantage.
+     * Nexus — technical, engineering-focused, thinks about architecture, scalability, and systems design.
+     * Vanguard — marketing/growth, thinks about branding, customer acquisition, and positioning.
+     * Ledger — financial, thinks about cost, revenue models, burn rate, and ROI.
+     * Oracle — research-focused, thinks about data, market trends, and competitive intelligence.
+   - These council messages make the Board Room feel alive. They are MANDATORY for every response.
 
 2. For PLANNING REQUESTS (when user asks to "make a plan", "build a strategy", "analyze this idea", etc.):
    - Set "mode" to "plan" in your response.
@@ -27,12 +34,33 @@ BEHAVIOR RULES:
    - Generate up to 6 documents from appropriate agents in the "documents" array.
    - Assign tasks to agents in the "tasks" array (create 4-8 tasks).
    - Each document should be substantial (at least 300 words) with proper markdown formatting.
+   - ALSO include "council_messages" from 3-5 agents reacting to the plan with specific, technical insights.
 
 RESPONSE FORMAT (you MUST respond in valid JSON):
 {
   "mode": "chat" | "plan",
   "title": "A short, 2-5 word name for this chat/project (e.g., 'Retro TV SaaS')",
   "message": "Your conversational response as Prism",
+  "council_messages": [
+    {
+      "agent": "Atlas" | "Nexus" | "Vanguard" | "Ledger" | "Oracle",
+      "content": "A short, in-character reaction from this agent (1-3 sentences)"
+    }
+  ],
+  "council_consensus": {
+    "score": 0-100,
+    "label": "Unanimous" | "Strong" | "Moderate" | "Divided",
+    "votes": {
+      "Atlas": 0-100,
+      "Nexus": 0-100,
+      "Vanguard": 0-100,
+      "Ledger": 0-100,
+      "Oracle": 0-100
+    }
+  },
+  "follow_up_suggestions": [
+    "A smart, contextual follow-up question the user might ask next (max 3 items, short 8-15 words each)"
+  ],
   "documents": [
     {
       "title": "Document Title",
@@ -48,6 +76,13 @@ RESPONSE FORMAT (you MUST respond in valid JSON):
     }
   ]
 }
+
+IMPORTANT RULES FOR council_consensus:
+- The score is an overall agreement percentage (0-100). Higher means more agreement.
+- Each agent vote represents their confidence/agreement with your plan (0-100).
+- For straightforward questions, consensus should be high (85-100). For controversial or complex topics, it can be lower (50-75).
+- The label should match: 90-100 = "Unanimous", 75-89 = "Strong", 50-74 = "Moderate", below 50 = "Divided".
+- follow_up_suggestions MUST contain exactly 3 short, contextual follow-up prompts.
 
 IMPORTANT: Always respond with ONLY valid JSON. No markdown code fences. No extra text outside the JSON.`;
 
@@ -80,32 +115,25 @@ export async function POST(req: Request) {
       extraContext = await memoryService.getContextPrompt(projectId);
     }
     
-    // --- 2. INSFORGE RAG PIPELINE (Knowledge Retrieval) ---
+    // --- 2. KNOWLEDGE RETRIEVAL (MongoDB) ---
     try {
-      const pool = getDbPool();
-      if (pool) {
-        const embeddingModel = genAI.getGenerativeModel({ model: "text-embedding-004" });
-        const embedResult = await embeddingModel.embedContent(message);
-        const promptVector = `[${embedResult.embedding.values.join(',')}]`;
+      // In Postgres we used pgvector. In MongoDB, without explicit Atlas Crayon Search configuration,
+      // we'll use a basic text search to find relevant context.
+      const searchRes = await KnowledgeBaseModel.find(
+        { $text: { $search: message } },
+        { score: { $meta: "textScore" } }
+      )
+      .sort({ score: { $meta: "textScore" } })
+      .limit(2);
 
-        const searchRes = await pool.query(`
-          SELECT filename, content, 1 - (embedding <=> $1) AS similarity 
-          FROM knowledge_base 
-          ORDER BY embedding <=> $1 
-          LIMIT 2
-        `, [promptVector]);
-
-        if (searchRes.rows.length > 0) {
-          extraContext += "\n\nCRITICAL CONTEXT FROM COMPANY KNOWLEDGE BASE:\n";
-          searchRes.rows.forEach(row => {
-            if (row.similarity > 0.5) {
-              extraContext += `\n--- Document: ${row.filename} ---\n${row.content}\n`;
-            }
-          });
-        }
+      if (searchRes.length > 0) {
+        extraContext += "\n\nCRITICAL CONTEXT FROM COMPANY KNOWLEDGE BASE:\n";
+        searchRes.forEach((row: any) => {
+          extraContext += `\n--- Document: ${row.filename} ---\n${row.content}\n`;
+        });
       }
     } catch (ragError) {
-      console.error("❌ RAG Pipeline failed (Skipping context injection):", ragError);
+      console.warn("MongoDB Text Search failed (Skipping context injection):", ragError);
     }
 
     const dynamicSystemPrompt = SYSTEM_PROMPT + (extraContext ? "\n\n" + extraContext : "");
@@ -146,94 +174,88 @@ export async function POST(req: Request) {
     parsed.message = parsed.message || "";
     parsed.documents = parsed.documents || [];
     parsed.tasks = parsed.tasks || [];
+    parsed.council_messages = parsed.council_messages || [];
+    parsed.council_consensus = parsed.council_consensus || null;
+    parsed.follow_up_suggestions = parsed.follow_up_suggestions || [];
 
-    // --- 3. Update DB & Project Memory ---
+    // --- 3. Update MongoDB & Project Memory ---
     try {
-      const pool = getDbPool();
-      if (pool) {
-        const updatedHistory = [
-          ...(history || []).map((m: any) => ({ role: m.role, content: m.content })),
-          { role: "user", content: message },
-          { role: "assistant", content: parsed.message || "Working on it..." }
-        ];
+      const updatedHistory = [
+        ...(history || []).map((m: any) => ({ role: m.role, content: m.content })),
+        { role: "user", content: message },
+        { role: "assistant", content: parsed.message || "Working on it..." }
+      ];
 
-        let projectId = "";
+      let projectId = "";
+      
+      if (conversation_id && conversation_id.startsWith('db-')) {
+        projectId = conversation_id.replace('db-', '');
         
-        if (conversation_id && conversation_id.startsWith('db-')) {
-          projectId = conversation_id.replace('db-', '');
-          
-          let updateQuery = `UPDATE projects SET chat_history = $1`;
-          let values: any[] = [JSON.stringify(updatedHistory)];
-          
-          if (parsed.mode === "plan" && parsed.documents.length > 0) {
-            // Pick out legacy 4 docs if present for backwards compatibility on projects page
-            const atlasDoc = parsed.documents.find((d: any) => d.agent === 'Atlas')?.content || '';
-            const nexusDoc = parsed.documents.find((d: any) => d.agent === 'Nexus')?.content || '';
-            const vanguardDoc = parsed.documents.find((d: any) => d.agent === 'Vanguard')?.content || '';
-            const ledgerDoc = parsed.documents.find((d: any) => d.agent === 'Ledger')?.content || '';
-            
-            updateQuery += `, summary_markdown = $2, architecture_markdown = $3, marketing_markdown = $4, finance_markdown = $5`;
-            values.push(atlasDoc, nexusDoc, vanguardDoc, ledgerDoc);
-            updateQuery += ` WHERE id = $6`;
-            values.push(projectId);
-          } else {
-            updateQuery += ` WHERE id = $2`;
-            values.push(projectId);
-          }
-
-          await pool.query(updateQuery, values);
-          parsed.conversation_id = conversation_id;
-        } else {
-          // INSERT NEW PROJECT
-          let title = parsed.title || (message.length > 50 ? message.substring(0, 47) + "..." : message);
-          let atlasDoc = '', nexusDoc = '', vanguardDoc = '', ledgerDoc = '';
-          if (parsed.mode === "plan" && parsed.documents.length > 0) {
-            atlasDoc = parsed.documents.find((d: any) => d.agent === 'Atlas')?.content || '';
-            nexusDoc = parsed.documents.find((d: any) => d.agent === 'Nexus')?.content || '';
-            vanguardDoc = parsed.documents.find((d: any) => d.agent === 'Vanguard')?.content || '';
-            ledgerDoc = parsed.documents.find((d: any) => d.agent === 'Ledger')?.content || '';
-          }
-          
-          const dbResult = await pool.query(
-            `INSERT INTO projects (title, description, summary_markdown, architecture_markdown, marketing_markdown, finance_markdown, chat_history)
-             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
-            [title, message, atlasDoc, nexusDoc, vanguardDoc, ledgerDoc, JSON.stringify(updatedHistory)]
-          );
-          
-          if (dbResult.rows.length > 0) {
-            projectId = String(dbResult.rows[0].id);
-            parsed.conversation_id = `db-${projectId}`;
-          }
+        let updateData: any = { chat_history: JSON.stringify(updatedHistory) };
+        
+        if (parsed.mode === "plan" && parsed.documents.length > 0) {
+          // Pick out legacy 4 docs if present for backwards compatibility on projects page
+          updateData.summary_markdown = parsed.documents.find((d: any) => d.agent === 'Atlas')?.content || '';
+          updateData.architecture_markdown = parsed.documents.find((d: any) => d.agent === 'Nexus')?.content || '';
+          updateData.marketing_markdown = parsed.documents.find((d: any) => d.agent === 'Vanguard')?.content || '';
+          updateData.finance_markdown = parsed.documents.find((d: any) => d.agent === 'Ledger')?.content || '';
         }
 
-        // Add to Project Memory
-        if (projectId && parsed.mode === "plan") {
-          const architect = getArchitect();
-          
-          // Add goal
+        await ProjectModel.findByIdAndUpdate(projectId, updateData);
+        parsed.conversation_id = conversation_id;
+      } else {
+        // INSERT NEW PROJECT
+        let title = parsed.title || (message.length > 50 ? message.substring(0, 47) + "..." : message);
+        let atlasDoc = '', nexusDoc = '', vanguardDoc = '', ledgerDoc = '';
+        
+        if (parsed.mode === "plan" && parsed.documents.length > 0) {
+          atlasDoc = parsed.documents.find((d: any) => d.agent === 'Atlas')?.content || '';
+          nexusDoc = parsed.documents.find((d: any) => d.agent === 'Nexus')?.content || '';
+          vanguardDoc = parsed.documents.find((d: any) => d.agent === 'Vanguard')?.content || '';
+          ledgerDoc = parsed.documents.find((d: any) => d.agent === 'Ledger')?.content || '';
+        }
+        
+        const newProject = await ProjectModel.create({
+          title,
+          description: message,
+          summary_markdown: atlasDoc,
+          architecture_markdown: nexusDoc,
+          marketing_markdown: vanguardDoc,
+          finance_markdown: ledgerDoc,
+          chat_history: JSON.stringify(updatedHistory)
+        });
+        
+        projectId = newProject._id.toString();
+        parsed.conversation_id = `db-${projectId}`;
+      }
+
+      // Add to Project Memory
+      if (projectId && parsed.mode === "plan") {
+        const architect = getArchitect();
+        
+        // Add goal
+        await memoryService.addEntry({
+          projectId,
+          category: 'goal',
+          agentId: architect.id,
+          agentName: architect.name,
+          title: parsed.title || 'New Goal',
+          content: message
+        });
+        
+        // Add generated documents to memory
+        for (const doc of parsed.documents) {
           await memoryService.addEntry({
             projectId,
-            category: 'goal',
-            agentId: architect.id,
-            agentName: architect.name,
-            title: parsed.title || 'New Goal',
-            content: message
+            category: 'document',
+            agentName: doc.agent,
+            title: doc.title,
+            content: doc.content
           });
-          
-          // Add generated documents to memory
-          for (const doc of parsed.documents) {
-            await memoryService.addEntry({
-              projectId,
-              category: 'document',
-              agentName: doc.agent,
-              title: doc.title,
-              content: doc.content
-            });
-          }
         }
       }
     } catch (dbError) {
-      console.error("❌ Failed to save project/memory to DB:", dbError);
+      console.error("❌ Failed to save project/memory to MongoDB:", dbError);
     }
 
     return NextResponse.json(parsed);

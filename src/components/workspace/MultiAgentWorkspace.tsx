@@ -160,13 +160,13 @@ export function MultiAgentWorkspace() {
     <section className="premium-card rounded-xl flex-1 flex flex-col h-[600px] overflow-hidden">
       <div className="flex items-center justify-between p-4 border-b border-outline-variant/30 bg-surface-container/30">
         <h3 className="text-sm font-bold text-on-surface flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-            <Bot className="w-3.5 h-3.5 text-emerald-500" />
+          <div className="w-6 h-6 rounded-lg bg-zinc-800/10 flex items-center justify-center">
+            <Bot className="w-3.5 h-3.5 text-zinc-300" />
           </div>
           Strategic Discussion
         </h3>
         <div className="flex items-center gap-2">
-          {isProcessing && <Loader2 className="w-3.5 h-3.5 text-emerald-500 animate-spin" />}
+          {isProcessing && <Loader2 className="w-3.5 h-3.5 text-zinc-300 animate-spin" />}
           <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-surface-container-high/50 border border-outline-variant/50 text-on-surface-variant uppercase tracking-wider">
             {conversationId ? 'Active Thread' : 'New Thread'}
           </span>
@@ -176,8 +176,8 @@ export function MultiAgentWorkspace() {
       <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-surface-container-lowest/30">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-on-surface-variant">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center mb-4">
-              <MessageSquare className="w-7 h-7 text-emerald-500/30" />
+            <div className="w-16 h-16 rounded-2xl bg-zinc-800/5 border border-zinc-600/10 flex items-center justify-center mb-4">
+              <MessageSquare className="w-7 h-7 text-zinc-300/30" />
             </div>
             <p className="text-sm font-semibold text-on-surface/60">Workspace is empty</p>
             <p className="text-xs text-on-surface-variant/50 mt-1.5 max-w-sm text-center">Enter a startup idea or strategic question to begin analysis with the AI executive team.</p>
@@ -193,7 +193,7 @@ export function MultiAgentWorkspace() {
                 className={`flex flex-col gap-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div className="flex items-center gap-2 px-1">
-                  <span className={`text-[10px] font-bold uppercase tracking-wider ${msg.role === 'user' ? 'text-on-surface/50' : 'text-emerald-500/70'}`}>
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${msg.role === 'user' ? 'text-on-surface/50' : 'text-zinc-300/70'}`}>
                     {msg.role === 'user' ? 'You' : msg.agent || 'Prism'}
                   </span>
                 </div>
@@ -223,7 +223,7 @@ export function MultiAgentWorkspace() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2 text-on-surface-variant text-sm p-3"
           >
-            <Loader2 className="w-4 h-4 animate-spin text-emerald-500" />
+            <Loader2 className="w-4 h-4 animate-spin text-zinc-300" />
             <span className="text-xs text-on-surface-variant/60">Orchestrating agents...</span>
           </motion.div>
         )}
@@ -237,13 +237,13 @@ export function MultiAgentWorkspace() {
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
             disabled={isProcessing}
-            className="w-full bg-surface-container-high/30 border border-outline-variant/40 rounded-xl py-3 pl-4 pr-14 text-sm text-on-surface focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all disabled:opacity-50 placeholder:text-on-surface-variant/30" 
+            className="w-full bg-surface-container-high/30 border border-outline-variant/40 rounded-xl py-3 pl-4 pr-14 text-sm text-on-surface focus:outline-none focus:border-zinc-600/40 focus:ring-1 focus:ring-zinc-600/20 transition-all disabled:opacity-50 placeholder:text-on-surface-variant/30" 
             placeholder="Type your startup idea to trigger the AI team..." 
           />
           <button 
             type="submit"
             disabled={isProcessing || !idea.trim()}
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg hover:shadow-lg hover:shadow-emerald-500/25 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none active:scale-95"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center bg-gradient-to-r from-zinc-800 to-zinc-950 text-white rounded-lg hover:shadow-lg hover:shadow-black/25 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none active:scale-95"
           >
             <Send className="w-4 h-4" />
           </button>

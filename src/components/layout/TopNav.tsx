@@ -28,20 +28,30 @@ export function TopNav() {
           <Menu className="w-5 h-5" />
         </button>
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-950 flex items-center justify-center shadow-lg shadow-black/20">
             <Zap className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
           </div>
-          <h1 className="text-lg font-bold text-on-surface">Vector</h1>
+          <h1 className="text-lg font-bold text-on-surface">Crayon</h1>
         </div>
       </div>
 
-      {/* Search Input */}
+      {/* Search Input & Context Switcher */}
       <div className="hidden md:flex items-center gap-4">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Organization</span>
+          <div className="flex items-center gap-2 text-sm font-semibold text-zinc-300">
+            <span>Global AI Division</span>
+            <span className="px-1.5 py-0.5 rounded text-[9px] bg-zinc-800 text-zinc-400 border border-zinc-700">Enterprise</span>
+          </div>
+        </div>
+        
+        <div className="w-px h-8 bg-outline-variant/30 mx-2" />
+
         <div className="relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 w-4 h-4 transition-colors group-focus-within:text-emerald-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 w-4 h-4 transition-colors group-focus-within:text-zinc-300" />
           <input 
             type="text" 
-            className="bg-surface-container/50 border border-outline-variant/50 rounded-lg py-2 pl-10 pr-20 text-sm text-on-surface focus:outline-none focus:border-emerald-500/50 focus:bg-surface-container w-72 transition-all placeholder:text-on-surface-variant/40" 
+            className="bg-surface-container/50 border border-outline-variant/50 rounded-lg py-2 pl-10 pr-20 text-sm text-on-surface focus:outline-none focus:border-zinc-600/50 focus:bg-surface-container w-72 transition-all placeholder:text-on-surface-variant/40" 
             placeholder="Search anything..." 
           />
           <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 text-on-surface-variant/30">
@@ -63,20 +73,26 @@ export function TopNav() {
           {mounted && theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
         
-        <button className="text-on-surface-variant hover:text-cyan-500 transition-all focus:outline-none relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-cyan-500/10 active:scale-95 group">
+        <button className="text-on-surface-variant hover:text-zinc-300 transition-all focus:outline-none relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-zinc-800/10 active:scale-95 group">
           <Globe className="w-4 h-4 group-hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-cyan-500 rounded-full shadow-[0_0_6px_rgba(6,182,212,0.5)] animate-pulse" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-zinc-800 rounded-full shadow-[0_0_6px_rgba(6,182,212,0.5)] animate-pulse" />
         </button>
 
         <button className="text-on-surface-variant hover:text-on-surface transition-all focus:outline-none relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface-container/80 active:scale-95">
           <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-zinc-800 rounded-full shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
         </button>
         
         {/* Profile avatar */}
-        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 border-2 border-surface overflow-hidden ml-1 hover:border-outline-variant transition-all duration-200 cursor-pointer flex items-center justify-center shadow-lg shadow-violet-500/10 active:scale-95 relative">
-          <span className="text-white text-xs font-bold">VA</span>
-          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-surface" />
+        <div className="flex items-center gap-3 border-l border-outline-variant/30 pl-4 ml-2">
+          <div className="flex flex-col items-end hidden lg:flex">
+            <span className="text-[12px] font-bold text-zinc-300">Admin</span>
+            <span className="text-[10px] text-zinc-500">admin@crayon.com</span>
+          </div>
+          <div className="w-9 h-9 rounded-full bg-zinc-800 border border-zinc-600 overflow-hidden hover:border-zinc-400 transition-all duration-200 cursor-pointer flex items-center justify-center shadow-lg shadow-black/10 active:scale-95 relative">
+            <span className="text-zinc-300 text-xs font-bold">AD</span>
+            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-zinc-400 rounded-full border-2 border-surface" />
+          </div>
         </div>
       </div>
     </header>

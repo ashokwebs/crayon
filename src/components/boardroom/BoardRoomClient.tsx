@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, memo } from "react";
-import { Send, Terminal, Brain, Target, Shield, ArrowRight, Loader2, TrendingUp, DollarSign, MessageSquare, Plus, FileText, ArrowLeft, Save, Edit, Trash, Cpu } from "lucide-react";
+import { Send, Terminal, Brain, Target, Shield, ArrowRight, Loader2, TrendingUp, DollarSign, MessageSquare, Plus, FileText, ArrowLeft, Save, Edit, Trash, Cpu, Zap, BarChart3, Sparkles, Clock } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,16 +21,12 @@ export function BoardRoomClient() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [conversations, setConversations] = useState<ConversationListItem[]>([]);
   const [messages, setMessages] = useState<{role: string, content: string, agent?: string}[]>([
-    { role: "assistant", agent: "Prism", content: "Hey! I'm Prism, your Lead Architect. I'm connected to the InsForge database and the executive council is online. Give me a project idea and I'll rally the team." },
-    { role: "assistant", agent: "Atlas", content: "Atlas (Strategy) standing by. Ready to analyze market fit, TAM, and business objectives." },
-    { role: "assistant", agent: "Nexus", content: "Nexus (Engineering) online. Cloud infrastructure and system architectures are green. Ready for deployment specs." },
-    { role: "assistant", agent: "Vanguard", content: "Vanguard (Marketing) synced. Go-to-market algorithms and social campaign matrices are loaded." },
-    { role: "assistant", agent: "Ledger", content: "Ledger (Finance) connected. Financial modeling and burn rate parameters are nominal." }
+    { role: "assistant", agent: "Prism", content: "Board Room online. I'm Prism, your Lead Architect. The executive council is connected to the Aicoo vector database and ready for orchestration. State your objective." },
   ]);
   
   // Documents state
   const [documents, setDocuments] = useState<any[]>([]);
-  const [activeRightTab, setActiveRightTab] = useState<'telemetry' | 'documents' | 'tokens'>('telemetry');
+  const [activeRightTab, setActiveRightTab] = useState<'telemetry' | 'documents' | 'analytics'>('telemetry');
   const [editingDoc, setEditingDoc] = useState<any | null>(null);
   const [isSavingDoc, setIsSavingDoc] = useState(false);
   const [showNewDocModal, setShowNewDocModal] = useState(false);
@@ -42,6 +38,12 @@ export function BoardRoomClient() {
   const [marketingState, setMarketingState] = useState<AgentState>("Idle");
   const [financeState, setFinanceState] = useState<AgentState>("Idle");
   const [telemetry, setTelemetry] = useState<string[]>(["[SYSTEM] Board Room initialized."]);
+
+  // Innovative Features State
+  const [consensus, setConsensus] = useState<{ score: number; label: string; votes: Record<string, number> } | null>(null);
+  const [followUps, setFollowUps] = useState<string[]>([]);
+  const [sessionStats, setSessionStats] = useState({ queries: 0, totalLatencyMs: 0, tokensUsed: 0, documentsGenerated: 0 });
+  const [lastLatencyMs, setLastLatencyMs] = useState(0);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const telemetryEndRef = useRef<HTMLDivElement>(null);
@@ -324,11 +326,7 @@ export function BoardRoomClient() {
     setDocuments([]);
     setEditingDoc(null);
     setMessages([
-      { role: "assistant", agent: "Prism", content: "Hey! I'm Prism, your Lead Architect. I'm connected to the InsForge database and the executive council is online. Give me a project idea and I'll rally the team." },
-      { role: "assistant", agent: "Atlas", content: "Atlas (Strategy) standing by. Ready to analyze market fit, TAM, and business objectives." },
-      { role: "assistant", agent: "Nexus", content: "Nexus (Engineering) online. Cloud infrastructure and system architectures are green. Ready for deployment specs." },
-      { role: "assistant", agent: "Vanguard", content: "Vanguard (Marketing) synced. Go-to-market algorithms and social campaign matrices are loaded." },
-      { role: "assistant", agent: "Ledger", content: "Ledger (Finance) connected. Financial modeling and burn rate parameters are nominal." }
+      { role: "assistant", agent: "Prism", content: "Board Room online. I'm Prism, your Lead Architect. The executive council is connected to the Aicoo vector database and ready for orchestration. State your objective." },
     ]);
     addTelemetry("[SYSTEM] Initialized new session.");
   };
@@ -385,11 +383,14 @@ export function BoardRoomClient() {
 
   const handleSend = async (userIdea: string) => {
     setIsProcessing(true);
+    setConsensus(null);
+    setFollowUps([]);
     setCeoState("Idle");
     setCtoState("Idle");
     setMarketingState("Idle");
     setFinanceState("Idle");
     
+    const sendStartTime = Date.now();
     addTelemetry(`[Prism] Received input: Analyzing intent...`);
     
     // Stagger agent startup to look like they are spinning up sequentially while we wait for the API
@@ -421,8 +422,28 @@ export function BoardRoomClient() {
 
       const data = await res.json();
 
+      // Track session analytics
+      const latency = Date.now() - sendStartTime;
+      setLastLatencyMs(latency);
+      const newTokens = Math.round((data.message || '').length / 3.8);
+      setSessionStats(prev => ({
+        queries: prev.queries + 1,
+        totalLatencyMs: prev.totalLatencyMs + latency,
+        tokensUsed: prev.tokensUsed + newTokens,
+        documentsGenerated: prev.documentsGenerated + (data.documents?.length || 0)
+      }));
+      addTelemetry(`[PERF] Response latency: ${latency}ms | Tokens: ~${newTokens}`);
+
+      // Set consensus & follow-ups
+      if (data.council_consensus) {
+        setConsensus(data.council_consensus);
+      }
+      if (data.follow_up_suggestions && data.follow_up_suggestions.length > 0) {
+        setFollowUps(data.follow_up_suggestions);
+      }
+
       if (data.mode === "plan") {
-        // Handle InsForge DB Project ID
+        // Handle Aicoo DB Project ID
         if (data.conversation_id) {
           setConversationId(data.conversation_id);
           localStorage.setItem('active_conversation_id', data.conversation_id);
@@ -438,6 +459,16 @@ export function BoardRoomClient() {
           newMsg[newMsg.length - 1] = { ...newMsg[newMsg.length - 1], content: data.message };
           return newMsg;
         });
+
+        // Show council messages as individual agent bubbles with staggered timing
+        if (data.council_messages && data.council_messages.length > 0) {
+          data.council_messages.forEach((cm: any, idx: number) => {
+            setTimeout(() => {
+              setMessages(prev => [...prev, { role: "assistant", agent: cm.agent, content: cm.content }]);
+              addTelemetry(`[${cm.agent}] Response received.`);
+            }, 400 + idx * 600);
+          });
+        }
 
         if (data.documents && data.documents.length > 0) {
           const newDocs = data.documents.map((doc: any, i: number) => ({
@@ -463,32 +494,61 @@ export function BoardRoomClient() {
         }
 
         addTelemetry("[System] All documents compiled. Council tasks assigned.");
-        setCeoState("Complete");
-        setCtoState("Complete");
-        setMarketingState("Complete");
-        setFinanceState("Complete");
-        setIsProcessing(false);
+        
+        const councilCount = (data.council_messages || []).length;
+        const totalDelay = 400 + councilCount * 600 + 200;
+        setTimeout(() => {
+          setCeoState("Complete");
+          setCtoState("Complete");
+          setMarketingState("Complete");
+          setFinanceState("Complete");
+          setIsProcessing(false);
+        }, totalDelay);
 
         setTimeout(() => {
           setCeoState("Idle");
           setCtoState("Idle");
           setMarketingState("Idle");
           setFinanceState("Idle");
-        }, 3000);
+        }, totalDelay + 3000);
 
       } else {
-        // Chat mode — abort council planning animation
-        setCeoState("Idle");
-        setCtoState("Idle");
-        setMarketingState("Idle");
-        setFinanceState("Idle");
+        // Chat mode
         addTelemetry(`[Prism] Responding in conversation mode.`);
         setMessages(prev => {
           const newMsg = [...prev];
           newMsg[newMsg.length - 1] = { ...newMsg[newMsg.length - 1], content: data.message };
           return newMsg;
         });
-        setIsProcessing(false);
+
+        // Show council messages as individual agent bubbles with staggered timing
+        if (data.council_messages && data.council_messages.length > 0) {
+          data.council_messages.forEach((cm: any, idx: number) => {
+            setTimeout(() => {
+              setMessages(prev => [...prev, { role: "assistant", agent: cm.agent, content: cm.content }]);
+              addTelemetry(`[${cm.agent}] Weighed in.`);
+              // Update agent status cards based on which agents are responding
+              const agentMap: Record<string, (s: AgentState) => void> = {
+                'Atlas': setCeoState, 'Nexus': setCtoState, 
+                'Vanguard': setMarketingState, 'Ledger': setFinanceState
+              };
+              if (agentMap[cm.agent]) {
+                agentMap[cm.agent]("Synthesizing");
+                setTimeout(() => agentMap[cm.agent]("Complete"), 800);
+                setTimeout(() => agentMap[cm.agent]("Idle"), 3000);
+              }
+            }, 300 + idx * 500);
+          });
+        }
+
+        const councilCount2 = (data.council_messages || []).length;
+        setTimeout(() => {
+          setCeoState("Idle");
+          setCtoState("Idle");
+          setMarketingState("Idle");
+          setFinanceState("Idle");
+          setIsProcessing(false);
+        }, 300 + councilCount2 * 500 + 300);
       }
 
     } catch (err: any) {
@@ -571,18 +631,66 @@ export function BoardRoomClient() {
               color="6366f1"
             />
           </div>
+
+          {/* Council Consensus Meter */}
+          {consensus && (
+            <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl p-4 shadow-sm shrink-0">
+              <h3 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3 flex items-center gap-2">
+                <BarChart3 className="w-3.5 h-3.5" /> Council Consensus
+              </h3>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="relative w-14 h-14">
+                  <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--outline-variant)" strokeWidth="3" strokeOpacity="0.3" />
+                    <motion.path
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none"
+                      stroke={consensus.score >= 90 ? '#4ade80' : consensus.score >= 75 ? '#a1a1aa' : consensus.score >= 50 ? '#facc15' : '#f87171'}
+                      strokeWidth="3"
+                      strokeDasharray={`${consensus.score}, 100`}
+                      initial={{ strokeDasharray: '0, 100' }}
+                      animate={{ strokeDasharray: `${consensus.score}, 100` }}
+                      transition={{ duration: 1, ease: 'easeOut' }}
+                    />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center text-sm font-black text-on-surface">{consensus.score}</span>
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-on-surface">{consensus.label}</p>
+                  <p className="text-[10px] text-on-surface-variant">Agreement Level</p>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                {consensus.votes && Object.entries(consensus.votes).map(([agent, vote]) => (
+                  <div key={agent} className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold text-on-surface-variant w-16 truncate">{agent}</span>
+                    <div className="flex-1 h-1.5 bg-surface-container-high/50 rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full"
+                        style={{ backgroundColor: (vote as number) >= 80 ? '#4ade80' : (vote as number) >= 60 ? '#a1a1aa' : '#facc15' }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${vote}%` }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                      />
+                    </div>
+                    <span className="text-[10px] font-bold text-on-surface-variant w-8 text-right">{String(vote)}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Saved Chats */}
         <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl p-4 shadow-sm flex-[1] overflow-y-auto min-h-0 flex flex-col">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-2">
-              <MessageSquare className="w-3.5 h-3.5 text-emerald-500" /> Active Chats
+              <MessageSquare className="w-3.5 h-3.5 text-zinc-300" /> Active Chats
             </h3>
             <button
               onClick={handleNewSession}
               disabled={isProcessing}
-              className="text-[10px] font-semibold text-emerald-500 hover:text-emerald-400 disabled:opacity-50 flex items-center gap-1 bg-emerald-500/8 border border-emerald-500/15 px-2.5 py-1 rounded-lg transition-all"
+              className="text-[10px] font-semibold text-zinc-300 hover:text-zinc-300 disabled:opacity-50 flex items-center gap-1 bg-zinc-800/8 border border-zinc-600/15 px-2.5 py-1 rounded-lg transition-all"
             >
               <Plus className="w-3 h-3" /> New
             </button>
@@ -605,11 +713,11 @@ export function BoardRoomClient() {
                       disabled={isProcessing}
                       className={`w-full text-left p-2.5 rounded-lg border text-[11px] transition-all flex flex-col gap-1 pr-16 ${
                         isSelected 
-                          ? 'border-emerald-500 bg-emerald-500/5 text-on-surface' 
+                          ? 'border-zinc-600 bg-zinc-800/5 text-on-surface' 
                           : 'border-outline-variant hover:border-on-surface-variant/30 text-on-surface-variant'
                       }`}
                     >
-                      <span className="font-semibold text-[11px] truncate block text-emerald-400">
+                      <span className="font-semibold text-[11px] truncate block text-zinc-300">
                         {displayName}
                       </span>
                       <span className="truncate text-on-surface-variant/75 text-[10px] block">
@@ -621,14 +729,14 @@ export function BoardRoomClient() {
                     <div className="absolute right-2 top-2 hidden group-hover:flex items-center gap-1 bg-surface-container-low rounded-md px-1 py-0.5 shadow-sm border border-outline-variant">
                       <button 
                         onClick={(e) => { e.stopPropagation(); handleRenameConversation(conv.conversation_id, displayName); }}
-                        className="p-1 text-on-surface-variant hover:text-emerald-400 hover:bg-emerald-500/10 rounded transition-colors"
+                        className="p-1 text-on-surface-variant hover:text-zinc-300 hover:bg-zinc-800/10 rounded transition-colors"
                         title="Rename"
                       >
                         <Edit className="w-3.5 h-3.5" />
                       </button>
                       <button 
                         onClick={(e) => { e.stopPropagation(); handleDeleteConversation(conv.conversation_id); }}
-                        className="p-1 text-on-surface-variant hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors"
+                        className="p-1 text-on-surface-variant hover:text-zinc-300 hover:bg-zinc-800/10 rounded transition-colors"
                         title="Delete"
                       >
                         <Trash className="w-3.5 h-3.5" />
@@ -654,11 +762,11 @@ export function BoardRoomClient() {
               <ArrowLeft className="w-4 h-4" /> Back to Chat
             </button>
             <div className="flex items-center gap-2">
-              {isSavingDoc && <Loader2 className="w-3.5 h-3.5 text-emerald-500 animate-spin" />}
+              {isSavingDoc && <Loader2 className="w-3.5 h-3.5 text-zinc-300 animate-spin" />}
               <button 
                 onClick={handleSaveDocument}
                 disabled={isSavingDoc}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 text-surface font-bold text-xs hover:bg-emerald-400 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 text-surface font-bold text-xs hover:bg-zinc-800 disabled:opacity-50 transition-colors"
               >
                 <Save className="w-3.5 h-3.5" /> Save Changes
               </button>
@@ -698,7 +806,7 @@ export function BoardRoomClient() {
         <div className="flex-1 bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl shadow-sm flex flex-col min-w-0">
           <div className="p-4 border-b border-outline-variant/30 bg-surface-container/30 flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-zinc-800 to-purple-600 flex items-center justify-center shadow-lg shadow-black/20">
                 <Brain className="w-4 h-4 text-white" />
               </div>
               <div>
@@ -706,7 +814,7 @@ export function BoardRoomClient() {
                 <p className="text-[10px] text-on-surface-variant font-medium">Lead Architect • Gemini 2.5</p>
               </div>
             </div>
-            {isProcessing && <Loader2 className="w-4 h-4 text-emerald-500 animate-spin" />}
+            {isProcessing && <Loader2 className="w-4 h-4 text-zinc-300 animate-spin" />}
           </div>
           
           {/* Chat History */}
@@ -726,17 +834,70 @@ export function BoardRoomClient() {
                     <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Prism</span>
                   </div>
                   <div className="p-4 rounded-xl bg-surface-container border border-outline-variant text-on-surface rounded-tl-sm flex items-center gap-2 shadow-sm">
-                    <Loader2 className="w-4 h-4 text-emerald-500 animate-spin" />
+                    <Loader2 className="w-4 h-4 text-zinc-300 animate-spin" />
                     <span className="text-on-surface-variant text-xs ml-2">Thinking...</span>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {messages.length === 0 && !isProcessing && (
+              <div className="flex flex-col items-center justify-center h-full text-center px-4 max-w-xl mx-auto opacity-70 mt-10">
+                <Brain className="w-10 h-10 text-zinc-500 mb-4" />
+                <h4 className="text-sm font-bold text-on-surface mb-2">Welcome to the Crayon OS Board Room</h4>
+                <p className="text-[11px] text-on-surface-variant mb-6 leading-relaxed">
+                  Prism is online and ready to orchestrate your Executive Council. Ask a question, paste a project spec, or select an enterprise template below.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                  {[
+                    "Design a global autonomous supply chain rebalancing system.",
+                    "Run a 5-year Monte Carlo revenue simulation for SaaS.",
+                    "Generate a SOC2 compliance architecture for healthcare.",
+                    "Build a predictive infrastructure scaling strategy."
+                  ].map((prompt, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleSend(prompt)}
+                      className="p-3 text-left bg-surface-container/50 border border-outline-variant/30 hover:border-zinc-500/50 hover:bg-surface-container rounded-xl transition-all group"
+                    >
+                      <span className="text-[11px] font-medium text-on-surface-variant group-hover:text-zinc-300">
+                        {prompt}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
   
           {/* Chat Input */}
           <div className="p-4 bg-surface-container/30 border-t border-outline-variant/30">
+            {/* Smart Follow-Up Suggestions */}
+            {followUps.length > 0 && !isProcessing && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="px-4 pb-2 flex gap-2 flex-wrap"
+              >
+                {followUps.map((suggestion, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setInput('');
+                      setMessages(prev => [...prev, { role: 'user', content: suggestion }]);
+                      setFollowUps([]);
+                      handleSend(suggestion);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-on-surface-variant bg-surface-container/50 border border-outline-variant/30 rounded-full hover:border-zinc-500/50 hover:bg-surface-container hover:text-zinc-200 transition-all group"
+                  >
+                    <Sparkles className="w-3 h-3 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+                    {suggestion}
+                  </button>
+                ))}
+              </motion.div>
+            )}
             <form onSubmit={handleSubmit} className="relative">
               <textarea 
                 value={input}
@@ -744,19 +905,25 @@ export function BoardRoomClient() {
                 onKeyDown={(e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmit(e); } }}
                 disabled={isProcessing}
                 placeholder="Ask Prism anything or give a project idea..."
-                className="w-full bg-surface-container-high/30 border border-outline-variant/40 rounded-xl py-3 pl-4 pr-12 text-sm text-on-surface focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all resize-none disabled:opacity-50 min-h-[50px] max-h-[150px] placeholder:text-on-surface-variant/30"
+                className="w-full bg-surface-container-high/30 border border-outline-variant/40 rounded-xl py-3 pl-4 pr-12 text-sm text-on-surface focus:outline-none focus:border-zinc-600/40 focus:ring-1 focus:ring-zinc-600/20 transition-all resize-none disabled:opacity-50 min-h-[50px] max-h-[150px] placeholder:text-on-surface-variant/30"
                 rows={1}
               />
               <button 
                 type="submit"
                 disabled={isProcessing || !input.trim()}
-                className="absolute right-2 top-2 w-9 h-9 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg flex items-center justify-center hover:shadow-lg hover:shadow-emerald-500/25 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none transition-all active:scale-95"
+                className="absolute right-2 top-2 w-9 h-9 bg-gradient-to-r from-zinc-800 to-zinc-950 text-white rounded-lg flex items-center justify-center hover:shadow-lg hover:shadow-black/25 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none transition-all active:scale-95"
               >
                 <Send className="w-4 h-4" />
               </button>
             </form>
-            <div className="text-[10px] text-center text-on-surface-variant mt-2">
-              Prism answers directly or delegates to the council when needed.
+            <div className="flex items-center justify-between text-[10px] text-on-surface-variant mt-2 px-1">
+              <span>Prism delegates to the council when needed.</span>
+              {lastLatencyMs > 0 && (
+                <span className="flex items-center gap-1 font-mono">
+                  <Clock className="w-3 h-3" />
+                  {lastLatencyMs}ms
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -781,13 +948,19 @@ export function BoardRoomClient() {
               >
                 <FileText className="w-3.5 h-3.5 mr-1.5" /> documents ({documents.length})
               </button>
+              <button
+                onClick={() => setActiveRightTab('analytics')}
+                className={`flex items-center px-3 py-1 text-xs font-medium rounded-lg transition-all ${activeRightTab === 'analytics' ? 'bg-surface-container-high/50 text-on-surface border border-outline-variant/50' : 'text-on-surface-variant/60 hover:text-on-surface'}`}
+              >
+                <Zap className="w-3.5 h-3.5 mr-1.5" /> metrics
+              </button>
             </div>
             
             {activeRightTab === 'documents' && conversationId && (
               <button
                 onClick={() => { setNewDocTitle(""); setShowNewDocModal(true); }}
                 disabled={isSavingDoc}
-                className="p-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20 disabled:opacity-50 mr-1"
+                className="p-1 rounded bg-zinc-800/10 border border-zinc-600/20 text-zinc-300 hover:bg-zinc-800/20 disabled:opacity-50 mr-1"
                 title="Create manual document"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -800,10 +973,10 @@ export function BoardRoomClient() {
               <div className="p-4 font-mono text-[10px] leading-relaxed">
                 {telemetry.map((log, idx) => (
                   <div key={idx} className={`${
-                    log.includes('[ERROR]') ? 'text-rose-500' :
-                    log.includes('[SYSTEM]') ? 'text-sky-500' :
-                    log.includes('Prism') ? 'text-emerald-500' :
-                    log.includes('Atlas') ? 'text-amber-500' :
+                    log.includes('[ERROR]') ? 'text-zinc-300' :
+                    log.includes('[SYSTEM]') ? 'text-zinc-300' :
+                    log.includes('Prism') ? 'text-zinc-300' :
+                    log.includes('Atlas') ? 'text-zinc-300' :
                     log.includes('Nexus') ? 'text-indigo-500' :
                     'text-on-surface-variant'
                   } mb-1.5 opacity-90`}>
@@ -823,9 +996,9 @@ export function BoardRoomClient() {
                     <button
                        key={doc._id}
                        onClick={() => setEditingDoc(doc)}
-                       className={`w-full text-left p-3 rounded-lg border border-outline-variant hover:border-on-surface-variant/30 hover:bg-surface-container-high transition-all flex items-start gap-2.5 ${editingDoc?._id === doc._id ? 'border-emerald-500 bg-emerald-500/5' : ''}`}
+                       className={`w-full text-left p-3 rounded-lg border border-outline-variant hover:border-on-surface-variant/30 hover:bg-surface-container-high transition-all flex items-start gap-2.5 ${editingDoc?._id === doc._id ? 'border-zinc-600 bg-zinc-800/5' : ''}`}
                     >
-                      <FileText className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                      <FileText className="w-4 h-4 text-zinc-300 shrink-0 mt-0.5" />
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-xs text-on-surface truncate">{doc.title}</div>
                         <div className="text-[10px] text-on-surface-variant truncate opacity-70">
@@ -835,6 +1008,37 @@ export function BoardRoomClient() {
                     </button>
                   ))
                 )}
+              </div>
+            ) : activeRightTab === 'analytics' ? (
+              <div className="p-4 space-y-4">
+                <div className="bg-surface-container/50 border border-outline-variant rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-on-surface-variant uppercase">Queries Executed</span>
+                    <Terminal className="w-4 h-4 text-zinc-400" />
+                  </div>
+                  <div className="text-2xl font-black text-on-surface">{sessionStats.queries}</div>
+                </div>
+                <div className="bg-surface-container/50 border border-outline-variant rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-on-surface-variant uppercase">Cumulative Latency</span>
+                    <Clock className="w-4 h-4 text-zinc-400" />
+                  </div>
+                  <div className="text-2xl font-black text-on-surface">{(sessionStats.totalLatencyMs / 1000).toFixed(1)}s</div>
+                </div>
+                <div className="bg-surface-container/50 border border-outline-variant rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-on-surface-variant uppercase">Tokens Consumed</span>
+                    <Cpu className="w-4 h-4 text-indigo-400" />
+                  </div>
+                  <div className="text-2xl font-black text-on-surface">{sessionStats.tokensUsed.toLocaleString()}</div>
+                </div>
+                <div className="bg-surface-container/50 border border-outline-variant rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-on-surface-variant uppercase">Documents Generated</span>
+                    <FileText className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div className="text-2xl font-black text-on-surface">{sessionStats.documentsGenerated}</div>
+                </div>
               </div>
             ) : null}
           </div>
@@ -856,7 +1060,7 @@ export function BoardRoomClient() {
               onKeyDown={(e) => { if (e.key === 'Enter') handleCreateDocument(); if (e.key === 'Escape') setShowNewDocModal(false); }}
               autoFocus
               placeholder="e.g. Q3 Market Entry Plan"
-              className="w-full bg-surface-container border border-outline-variant rounded-lg py-2.5 px-4 text-sm text-on-surface focus:outline-none focus:border-emerald-500 transition-colors mb-4"
+              className="w-full bg-surface-container border border-outline-variant rounded-lg py-2.5 px-4 text-sm text-on-surface focus:outline-none focus:border-zinc-600 transition-colors mb-4"
             />
             <div className="flex gap-2 justify-end">
               <button
@@ -868,7 +1072,7 @@ export function BoardRoomClient() {
               <button
                 onClick={handleCreateDocument}
                 disabled={!newDocTitle.trim() || isSavingDoc}
-                className="px-4 py-2 rounded-lg bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 rounded-lg bg-zinc-800 text-white text-xs font-bold hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5"
               >
                 {isSavingDoc ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                 Create Document
@@ -885,9 +1089,9 @@ export function BoardRoomClient() {
 const AgentStatusCard = memo(function AgentStatusCard({ name, role, state, icon, color }: { name: string, role: string, state: AgentState, icon: React.ReactNode, color: string }) {
   const getStateColor = () => {
     switch(state) {
-      case "Analyzing": return "text-amber-500 bg-amber-500/10 border-amber-500/20 animate-pulse";
+      case "Analyzing": return "text-zinc-300 bg-zinc-800/10 border-zinc-600/20 animate-pulse";
       case "Synthesizing": return "text-indigo-500 bg-indigo-500/10 border-indigo-500/20";
-      case "Complete": return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
+      case "Complete": return "text-zinc-300 bg-zinc-800/10 border-zinc-600/20";
       default: return "text-on-surface-variant bg-surface-container border-outline-variant";
     }
   };
@@ -902,7 +1106,7 @@ const AgentStatusCard = memo(function AgentStatusCard({ name, role, state, icon,
       {state === 'Analyzing' && (
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: [0.3, 0.8, 0.3] }} transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent pointer-events-none"
+          className="absolute inset-0 bg-gradient-to-r from-zinc-800/10 to-transparent pointer-events-none"
         />
       )}
       {state === 'Synthesizing' && (

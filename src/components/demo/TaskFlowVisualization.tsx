@@ -29,11 +29,11 @@ export function TaskFlowVisualization({ events }: { events: DemoEvent[] }) {
             className="premium-card rounded-lg p-3 flex gap-3 items-start border-l-2 border-l-emerald-500"
           >
             {event.type === 'aicoo_route' || event.type === 'aicoo_response' ? (
-              <div className="w-8 h-8 rounded bg-cyan-500/10 text-cyan-500 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded bg-zinc-800/10 text-zinc-300 flex items-center justify-center shrink-0">
                 <Globe className="w-4 h-4" />
               </div>
             ) : event.type === 'deliverable_added' ? (
-              <div className="w-8 h-8 rounded bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded bg-zinc-800/10 text-zinc-300 flex items-center justify-center shrink-0">
                 <CheckCircle2 className="w-4 h-4" />
               </div>
             ) : (

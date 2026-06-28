@@ -16,69 +16,47 @@ type Conversation = {
 const activeInitiatives = [
   {
     id: 1,
-    name: "Project Quantum",
-    description: "Next-gen video rendering pipeline",
+    name: "Crayon OS Kernel Upgrade",
+    description: "Migrating core orchestrator to Rust",
     status: "In Progress",
-    progress: 75,
+    progress: 88,
     dueDate: "Q3 2026",
     icon: Activity,
-    color: "text-blue-500",
-    bg: "bg-blue-500/10",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
   },
   {
     id: 2,
-    name: "Nexus Redesign",
-    description: "Overhaul of the core user dashboard",
+    name: "Global VPC Peering",
+    description: "Cross-region latency optimization",
     status: "Planning",
-    progress: 25,
+    progress: 15,
     dueDate: "Q4 2026",
     icon: Target,
-    color: "text-purple-500",
-    bg: "bg-purple-500/10",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
   },
   {
     id: 3,
-    name: "Vanguard Launch",
-    description: "Global marketing campaign execution",
+    name: "Enterprise SSO Integration",
+    description: "SAML/OIDC compliance for Fortune 500",
     status: "Pending",
     progress: 0,
     dueDate: "Q1 2027",
     icon: Clock,
-    color: "text-amber-500",
-    bg: "bg-amber-500/10",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
   },
   {
     id: 4,
-    name: "Ledger API Integration",
-    description: "Stripe and PayPal multi-currency support",
+    name: "Zero-Trust Mesh Routing",
+    description: "mTLS enforcement across Aicoo network",
     status: "Completed",
     progress: 100,
     dueDate: "Q2 2026",
     icon: CheckCircle2,
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
-  },
-  {
-    id: 5,
-    name: "Atlas Data Lake",
-    description: "Enterprise user telemetry aggregation",
-    status: "In Progress",
-    progress: 60,
-    dueDate: "Q3 2026",
-    icon: Activity,
-    color: "text-cyan-500",
-    bg: "bg-cyan-500/10",
-  },
-  {
-    id: 6,
-    name: "Prism NLU V2",
-    description: "Upgraded Natural Language Understanding",
-    status: "Planning",
-    progress: 10,
-    dueDate: "Q4 2026",
-    icon: Target,
-    color: "text-rose-500",
-    bg: "bg-rose-500/10",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
   }
 ];
 
@@ -88,9 +66,9 @@ const agentWorkspaces = [
     name: "Prism (Lead Architect)",
     description: "System orchestration and overall architectural design patterns.",
     icon: Target,
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
-    gradient: "from-emerald-400 to-teal-600",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
+    gradient: "from-zinc-800 to-zinc-950",
     activeTasks: 3,
     status: "Online",
     details: "Currently optimizing the event-driven microservices layout."
@@ -100,9 +78,9 @@ const agentWorkspaces = [
     name: "Atlas (CEO / Strategy)",
     description: "Business model formulation, TAM analysis, and pitch decks.",
     icon: Activity,
-    color: "text-blue-500",
-    bg: "bg-blue-500/10",
-    gradient: "from-blue-400 to-indigo-600",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
+    gradient: "from-zinc-800 to-zinc-950",
     activeTasks: 1,
     status: "Online",
     details: "Drafting the Series A valuation targets."
@@ -112,9 +90,9 @@ const agentWorkspaces = [
     name: "Nexus (CTO / Engineering)",
     description: "Technical specifications, database schemas, and API design.",
     icon: CheckCircle2,
-    color: "text-purple-500",
-    bg: "bg-purple-500/10",
-    gradient: "from-violet-400 to-purple-600",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
+    gradient: "from-zinc-800 to-zinc-950",
     activeTasks: 5,
     status: "Busy",
     details: "Reviewing pull requests and scaling the GPU inference cluster."
@@ -124,9 +102,9 @@ const agentWorkspaces = [
     name: "Vanguard (CMO / Marketing)",
     description: "Go-to-market strategies, SEO optimization, and viral loops.",
     icon: Target,
-    color: "text-amber-500",
-    bg: "bg-amber-500/10",
-    gradient: "from-amber-400 to-orange-600",
+    color: "text-zinc-300",
+    bg: "bg-zinc-800/10",
+    gradient: "from-zinc-800 to-zinc-950",
     activeTasks: 2,
     status: "Online",
     details: "A/B testing the new freemium tier landing pages."
@@ -195,7 +173,7 @@ export default function ProjectsPage() {
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         
-        // Map InsForge DB projects to the UI format
+        // Map Aicoo DB projects to the UI format
         const dbProjects = (data.projects || []).map((p: any) => ({
           conversation_id: `db-${p.id}`,
           title: p.title || "Generated Plan",
@@ -210,7 +188,7 @@ export default function ProjectsPage() {
         setConversations([...dbProjects, ...demoProjects]);
 
       } catch (err) {
-        console.error("Error fetching InsForge projects:", err);
+        console.error("Error fetching Aicoo projects:", err);
       } finally {
         setLoading(false);
       }
@@ -276,7 +254,7 @@ export default function ProjectsPage() {
         </div>
         <Link
           href="/boardroom"
-          className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center gap-2 active:scale-[0.98]"
+          className="bg-gradient-to-r from-zinc-800 to-zinc-950 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-black/25 transition-all flex items-center gap-2 active:scale-[0.98]"
         >
           <Plus className="w-4 h-4" />
           New Project
@@ -286,12 +264,12 @@ export default function ProjectsPage() {
       {/* Search */}
       <div className="mb-10">
         <div className="relative group max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/40 w-4 h-4 transition-colors group-focus-within:text-emerald-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/40 w-4 h-4 transition-colors group-focus-within:text-zinc-300" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-surface-container/50 border border-outline-variant/50 rounded-xl py-2.5 pl-10 pr-4 text-sm text-on-surface focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 w-full transition-all placeholder:text-on-surface-variant/40"
+            className="bg-surface-container/50 border border-outline-variant/50 rounded-xl py-2.5 pl-10 pr-4 text-sm text-on-surface focus:outline-none focus:border-zinc-600/40 focus:ring-1 focus:ring-zinc-600/20 w-full transition-all placeholder:text-on-surface-variant/40"
             placeholder="Search projects or agents..."
           />
         </div>
@@ -331,10 +309,10 @@ export default function ProjectsPage() {
                   </div>
                   <div className="flex flex-col items-end">
                     <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
-                      project.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' :
-                      project.status === 'In Progress' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' :
+                      project.status === 'Completed' ? 'bg-zinc-800/10 text-zinc-300 dark:text-zinc-300' :
+                      project.status === 'In Progress' ? 'bg-zinc-800/10 text-zinc-300 dark:text-zinc-300' :
                       project.status === 'Planning' ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400' :
-                      'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                      'bg-zinc-800/10 text-zinc-300 dark:text-zinc-300'
                     }`}>
                       {project.status}
                     </span>
@@ -353,7 +331,7 @@ export default function ProjectsPage() {
                   <div className="h-2 w-full bg-surface-container-high rounded-full overflow-hidden shadow-inner">
                     <div 
                       className={`h-full rounded-full transition-all duration-1000 ${
-                        project.progress === 100 ? 'bg-emerald-500' : 
+                        project.progress === 100 ? 'bg-zinc-800' : 
                         project.progress === 0 ? 'bg-transparent' : 'bg-on-surface'
                       }`}
                       style={{ width: `${project.progress}%` }}
@@ -388,7 +366,7 @@ export default function ProjectsPage() {
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${agent.gradient} flex items-center justify-center text-white shadow-lg shrink-0 group-hover:scale-105 transition-transform`}>
                     <agent.icon className="w-6 h-6" />
                   </div>
-                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${agent.status === 'Online' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
+                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${agent.status === 'Online' ? 'bg-zinc-800/10 text-zinc-300' : 'bg-zinc-800/10 text-zinc-300'}`}>
                     {agent.status}
                   </span>
                 </div>
@@ -418,7 +396,7 @@ export default function ProjectsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center p-20">
-          <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-zinc-300" />
         </div>
       ) : filtered.length === 0 ? (
         <div className="bg-surface border border-outline-variant rounded-xl p-12 text-center text-on-surface-variant flex flex-col items-center">
@@ -449,12 +427,12 @@ export default function ProjectsPage() {
             const preview = lastMsg?.content?.slice(0, 120) || "No messages yet";
             const isSeed = false; // All are real database entries now
             const gradients = [
-              "from-emerald-400 to-teal-600",
-              "from-blue-400 to-indigo-600",
-              "from-violet-400 to-purple-600",
-              "from-amber-400 to-orange-600",
-              "from-rose-400 to-pink-600",
-              "from-cyan-400 to-blue-600",
+              "from-zinc-700 to-zinc-950",
+              "from-zinc-800 to-zinc-900",
+              "from-zinc-600 to-zinc-800",
+              "from-zinc-800 to-zinc-950",
+              "from-zinc-700 to-zinc-900",
+              "from-zinc-800 to-zinc-950",
             ];
             const gradient = gradients[idx % gradients.length];
 
@@ -478,7 +456,7 @@ export default function ProjectsPage() {
                         {(conv.title || "P").charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="text-sm font-bold text-on-surface group-hover:text-emerald-500 transition-colors line-clamp-1">
+                        <h3 className="text-sm font-bold text-on-surface group-hover:text-zinc-300 transition-colors line-clamp-1">
                           {conv.title || "Untitled Project"}
                         </h3>
                         <p className="text-[10px] text-on-surface-variant/50 font-mono mt-0.5">
@@ -490,7 +468,7 @@ export default function ProjectsPage() {
                       {parseInt(conv.conversation_id.replace('db-', '')) > 6 && (
                         <button
                           onClick={(e) => handleDelete(e, conv.conversation_id)}
-                          className="p-1.5 text-on-surface-variant/40 hover:text-rose-500 hover:bg-rose-500/10 rounded-md transition-colors opacity-0 group-hover:opacity-100"
+                          className="p-1.5 text-on-surface-variant/40 hover:text-zinc-300 hover:bg-zinc-800/10 rounded-md transition-colors opacity-0 group-hover:opacity-100"
                           title="Delete Project"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -510,7 +488,7 @@ export default function ProjectsPage() {
                       <span>{msgCount} messages</span>
                     </div>
                     <div className="flex items-center gap-1 text-[10px] text-on-surface-variant/60">
-                      <FileText className="w-3 h-3 text-emerald-500/60" />
+                      <FileText className="w-3 h-3 text-zinc-300/60" />
                       <span>{conv.documents_count || 0} documents</span>
                     </div>
                     <div className="flex items-center gap-1 text-[10px] text-on-surface-variant/60">
@@ -524,6 +502,32 @@ export default function ProjectsPage() {
           })}
         </div>
       )}
+
+      {/* Projects Insight Footer */}
+      <div className="mt-8 shrink-0 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="premium-card rounded-xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <Target className="w-5 h-5 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Portfolio Orchestration</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1.5 leading-relaxed">
+              Every initiative is autonomously managed by the Crayon OS Executive Layer. The system assigns specialized agents to draft specifications, analyze market fits, and synthesize strategic directives into actionable code and documentation.
+            </p>
+          </div>
+        </div>
+        <div className="premium-card rounded-xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center shrink-0">
+            <Activity className="w-5 h-5 text-zinc-300" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-on-surface">Live Agent Workspaces</h4>
+            <p className="text-[11px] text-on-surface-variant/80 mt-1.5 leading-relaxed">
+              Active projects maintain a dedicated memory context in the Aicoo vector store, ensuring continuity. Agents seamlessly shift focus between workspaces while preserving exact project state and historical decisions.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

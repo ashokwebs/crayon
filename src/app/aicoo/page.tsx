@@ -42,11 +42,11 @@ export default function AicooPage() {
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 shrink-0">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-zinc-800 to-zinc-950 flex items-center justify-center text-white shadow-lg shadow-black/20">
               <Globe className="w-5 h-5" />
             </div>
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface">
-              Aicoo <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Network</span>
+              Aicoo <span className="bg-gradient-to-r from-zinc-800 to-zinc-950 bg-clip-text text-transparent">Network</span>
             </h2>
           </div>
           <p className="text-sm text-on-surface-variant/70 max-w-2xl">
@@ -54,11 +54,11 @@ export default function AicooPage() {
           </p>
         </div>
         <div className="flex items-center gap-3 text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/8 border border-emerald-500/15 text-emerald-500 font-bold">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800/8 border border-zinc-600/15 text-zinc-300 font-bold">
+            <span className="w-1.5 h-1.5 rounded-full bg-zinc-800 animate-pulse" />
             {connected.length} Connected
           </span>
-          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/8 border border-amber-500/15 text-amber-500 font-bold">
+          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800/8 border border-zinc-600/15 text-zinc-300 font-bold">
             {pending.length} Pending
           </span>
           <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/30 text-on-surface-variant font-bold">
@@ -94,10 +94,28 @@ export default function AicooPage() {
         {activeTab === 'overview' && (
           <motion.div key="overview" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
 
+            {/* Aicoo Documentation/Overview */}
+            <section className="bg-surface-container/30 border border-outline-variant/50 rounded-xl p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-zinc-800/10 flex items-center justify-center text-zinc-300 shrink-0">
+                  <Shield className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-on-surface mb-2">The Aicoo Network Advantage</h3>
+                  <p className="text-sm text-on-surface-variant/80 leading-relaxed max-w-4xl">
+                    Aicoo (AI Collaborative Organization Online) represents a paradigm shift in autonomous B2B interaction. 
+                    By securely linking your Crayon OS executive layer to verified external organizations, Aicoo enables frictionless, zero-trust 
+                    cross-organizational workflows. Agents can negotiate SLAs, exchange structured context, and execute complex cross-platform 
+                    integrations at machine speed, completely redefining operational efficiency.
+                  </p>
+                </div>
+              </div>
+            </section>
+
             {/* Connected Organizations */}
             <section>
               <h3 className="text-sm font-bold text-on-surface mb-4 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
                 Connected Organizations
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -108,7 +126,7 @@ export default function AicooPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
                     onClick={() => setSelectedOrg(selectedOrg?.id === org.id ? null : org)}
-                    className={`premium-card rounded-xl p-5 cursor-pointer group transition-all ${selectedOrg?.id === org.id ? 'ring-2 ring-cyan-500/50' : ''}`}
+                    className={`premium-card rounded-xl p-5 cursor-pointer group transition-all ${selectedOrg?.id === org.id ? 'ring-2 ring-zinc-600/50' : ''}`}
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
@@ -116,11 +134,11 @@ export default function AicooPage() {
                           {org.name.charAt(0)}
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-on-surface group-hover:text-cyan-500 transition-colors">{org.name}</h4>
+                          <h4 className="text-sm font-bold text-on-surface group-hover:text-zinc-300 transition-colors">{org.name}</h4>
                           <p className="text-[10px] text-on-surface-variant/60 font-medium">{org.specialization}</p>
                         </div>
                       </div>
-                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 uppercase">Connected</span>
+                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-zinc-800/10 text-zinc-300 border border-zinc-600/20 uppercase">Connected</span>
                     </div>
                     <p className="text-xs text-on-surface-variant/70 line-clamp-2 mb-3">{org.description}</p>
                     <div className="flex items-center gap-4 pt-3 border-t border-outline-variant/30">
@@ -157,7 +175,7 @@ export default function AicooPage() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 mt-2">
-                            <span className={`w-1.5 h-1.5 rounded-full ${agent.status === 'online' ? 'bg-emerald-500' : agent.status === 'busy' ? 'bg-amber-500' : 'bg-zinc-500'}`} />
+                            <span className={`w-1.5 h-1.5 rounded-full ${agent.status === 'online' ? 'bg-zinc-800' : agent.status === 'busy' ? 'bg-zinc-800' : 'bg-zinc-500'}`} />
                             <span className="text-[10px] text-on-surface-variant/60 capitalize">{agent.status}</span>
                           </div>
                           <div className="flex flex-wrap gap-1 mt-2">
@@ -177,7 +195,7 @@ export default function AicooPage() {
             {(pending.length > 0 || available.length > 0) && (
               <section>
                 <h3 className="text-sm font-bold text-on-surface mb-4 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
                   Pending & Available
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -200,7 +218,7 @@ export default function AicooPage() {
                           </div>
                         </div>
                         <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border ${
-                          org.status === 'pending' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-surface-container-high text-on-surface-variant border-outline-variant/30'
+                          org.status === 'pending' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' : 'bg-surface-container-high text-on-surface-variant border-outline-variant/30'
                         }`}>{org.status}</span>
                       </div>
                       <p className="text-xs text-on-surface-variant/70 line-clamp-2">{org.description}</p>
@@ -213,10 +231,10 @@ export default function AicooPage() {
             {/* Quick Stats */}
             <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { label: 'Active Routes', value: String(activeRoutes.length), color: 'text-cyan-500', bg: 'bg-cyan-500/8' },
-                { label: 'Completed Tasks', value: String(completedRoutes.length), color: 'text-emerald-500', bg: 'bg-emerald-500/8' },
-                { label: 'Shared Contexts', value: String(MOCK_CONTEXTS.length), color: 'text-violet-500', bg: 'bg-violet-500/8' },
-                { label: 'Pending Requests', value: String(MOCK_REQUESTS.filter(r => r.status === 'pending').length), color: 'text-amber-500', bg: 'bg-amber-500/8' },
+                { label: 'Active Routes', value: String(activeRoutes.length), color: 'text-zinc-300', bg: 'bg-zinc-800/8' },
+                { label: 'Completed Tasks', value: String(completedRoutes.length), color: 'text-zinc-300', bg: 'bg-zinc-800/8' },
+                { label: 'Shared Contexts', value: String(MOCK_CONTEXTS.length), color: 'text-zinc-300', bg: 'bg-zinc-800/8' },
+                { label: 'Pending Requests', value: String(MOCK_REQUESTS.filter(r => r.status === 'pending').length), color: 'text-zinc-300', bg: 'bg-zinc-800/8' },
               ].map(stat => (
                 <div key={stat.label} className="premium-card rounded-xl p-4">
                   <p className="text-[11px] text-on-surface-variant/60 font-medium mb-1">{stat.label}</p>
@@ -238,7 +256,7 @@ export default function AicooPage() {
                 className="premium-card rounded-xl p-4 flex gap-4"
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-sm shrink-0 ${
-                  msg.fromOrganization === 'Vector AI' ? 'bg-gradient-to-br from-emerald-400 to-teal-600' : 'bg-gradient-to-br from-cyan-400 to-blue-600'
+                  msg.fromOrganization === 'Crayon AI' ? 'bg-gradient-to-br from-zinc-800 to-zinc-950' : 'bg-gradient-to-br from-zinc-800 to-zinc-950'
                 }`}>
                   {msg.fromAgentName.charAt(0)}
                 </div>
@@ -248,9 +266,9 @@ export default function AicooPage() {
                     <ArrowRight className="w-3 h-3 text-on-surface-variant/30" />
                     <span className="text-sm font-medium text-on-surface-variant">{msg.toAgentName}</span>
                     <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase ${
-                      msg.type === 'request' ? 'bg-amber-500/10 text-amber-500' :
-                      msg.type === 'response' ? 'bg-emerald-500/10 text-emerald-500' :
-                      'bg-violet-500/10 text-violet-500'
+                      msg.type === 'request' ? 'bg-zinc-800/10 text-zinc-300' :
+                      msg.type === 'response' ? 'bg-zinc-800/10 text-zinc-300' :
+                      'bg-zinc-800/10 text-zinc-300'
                     }`}>{msg.type}</span>
                   </div>
                   <div className="flex items-center gap-2 text-[10px] text-on-surface-variant/50 mb-2">
@@ -279,30 +297,30 @@ export default function AicooPage() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className={`w-3 h-3 rounded-full ${
-                      route.status === 'completed' ? 'bg-emerald-500' :
-                      route.status === 'in_progress' ? 'bg-blue-500 animate-pulse' :
-                      route.status === 'routing' ? 'bg-amber-500 animate-pulse' :
-                      'bg-rose-500'
+                      route.status === 'completed' ? 'bg-zinc-800' :
+                      route.status === 'in_progress' ? 'bg-zinc-800 animate-pulse' :
+                      route.status === 'routing' ? 'bg-zinc-800 animate-pulse' :
+                      'bg-zinc-800'
                     }`} />
                     <h4 className="text-sm font-bold text-on-surface">{route.taskDescription}</h4>
                   </div>
                   <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border ${
-                    route.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-                    route.status === 'in_progress' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-                    route.status === 'routing' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
-                    'bg-rose-500/10 text-rose-500 border-rose-500/20'
+                    route.status === 'completed' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' :
+                    route.status === 'in_progress' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' :
+                    route.status === 'routing' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' :
+                    'bg-zinc-800/10 text-zinc-300 border-zinc-600/20'
                   }`}>{route.status.replace('_', ' ')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-on-surface-variant/60 mb-2">
                   <span className="font-medium text-on-surface">{route.sourceAgentName}</span>
                   <span className="text-on-surface-variant/30">({route.sourceOrganization})</span>
-                  <ArrowRight className="w-3 h-3 text-cyan-500" />
+                  <ArrowRight className="w-3 h-3 text-zinc-300" />
                   <span className="font-medium text-on-surface">{route.targetAgentName}</span>
                   <span className="text-on-surface-variant/30">({route.targetOrganization})</span>
                 </div>
                 {route.result && (
-                  <div className="mt-3 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/15">
-                    <p className="text-xs text-emerald-500/80"><Check className="w-3 h-3 inline mr-1" />{route.result}</p>
+                  <div className="mt-3 p-3 rounded-lg bg-zinc-800/5 border border-zinc-600/15">
+                    <p className="text-xs text-zinc-300/80"><Check className="w-3 h-3 inline mr-1" />{route.result}</p>
                   </div>
                 )}
                 <div className="flex items-center gap-2 mt-3 text-[10px] text-on-surface-variant/40">
@@ -328,8 +346,8 @@ export default function AicooPage() {
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-sm font-bold text-on-surface">{req.title}</h4>
                   <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase border ${
-                    req.priority === 'high' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
-                    req.priority === 'medium' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
+                    req.priority === 'high' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' :
+                    req.priority === 'medium' ? 'bg-zinc-800/10 text-zinc-300 border-zinc-600/20' :
                     'bg-surface-container-high text-on-surface-variant border-outline-variant/30'
                   }`}>{req.priority}</span>
                 </div>
@@ -340,7 +358,7 @@ export default function AicooPage() {
                   <span className="ml-auto"><Clock className="w-3 h-3 inline mr-0.5" />{timeAgo(req.createdAt)}</span>
                 </div>
                 <div className="flex gap-2 mt-4">
-                  <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold hover:shadow-lg hover:shadow-emerald-500/25 transition-all active:scale-[0.98]">
+                  <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-zinc-800 to-zinc-950 text-white text-xs font-bold hover:shadow-lg hover:shadow-black/25 transition-all active:scale-[0.98]">
                     <Check className="w-3 h-3 inline mr-1" />Accept
                   </button>
                   <button className="px-4 py-2 rounded-lg bg-surface-container border border-outline-variant/50 text-on-surface-variant text-xs font-semibold hover:border-outline-variant transition-all">

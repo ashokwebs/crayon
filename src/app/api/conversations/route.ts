@@ -1,45 +1,20 @@
-import { NextResponse } from 'next/server';
-import { getDbPool, initDb } from '@/lib/db';
-
-let dbInitialized = false;
+import { NextResponse } from "next/server";
+import { initDb, ProjectModel } from "@/lib/db";
 
 export async function GET() {
   try {
-    if (!dbInitialized) {
-      await initDb();
-      dbInitialized = true;
-    }
+    await initDb();
+    const projects = await ProjectModel.find({}, 'title description created_at').sort({ created_at: -1 });
 
-    const pool = getDbPool();
-    if (!pool) {
-      return NextResponse.json({ conversations: [] });
-    }
+    const mapped = projects.map(p => ({
+      id: p._id.toString(),
+      title: p.title,
+      preview: p.description || "",
+      timestamp: p.created_at ? new Date(p.created_at).getTime() : Date.now()
+    }));
 
-    const result = await pool.query(
-      'SELECT id, title, description, created_at, chat_history FROM projects ORDER BY created_at DESC'
-    );
-
-    const conversations = result.rows.map(row => {
-      let messages = [];
-      try {
-        messages = typeof row.chat_history === 'string' 
-          ? JSON.parse(row.chat_history) 
-          : (row.chat_history || []);
-      } catch (e) {
-        // ignore fallback
-      }
-
-      return {
-        conversation_id: `db-${row.id}`,
-        title: row.title,
-        created_at: row.created_at,
-        messages: messages
-      };
-    });
-
-    return NextResponse.json({ conversations });
-  } catch (error) {
-    console.error("Failed to load conversations from InsForge DB:", error);
-    return NextResponse.json({ conversations: [] });
+    return NextResponse.json(mapped);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

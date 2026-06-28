@@ -1,5 +1,5 @@
 // ─── Agent Type System ─────────────────────────────────────────
-// Central type definitions for the Vector AI Operating System agent framework.
+// Central type definitions for the Crayon AI Operating System agent framework.
 
 export type AgentTier = 'architect' | 'executive' | 'director';
 

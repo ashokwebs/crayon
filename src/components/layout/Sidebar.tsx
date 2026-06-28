@@ -42,13 +42,13 @@ export function Sidebar() {
       {/* Brand */}
       <div className="flex items-center justify-between mb-6 px-2 mt-1">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/25 glow-emerald relative">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950 flex items-center justify-center shadow-lg shadow-black/25 relative">
             <Zap className="w-5 h-5 text-white" strokeWidth={2.5} />
-            <div className="absolute inset-0 rounded-xl bg-emerald-400/20 animate-pulse" />
+            <div className="absolute inset-0 rounded-xl bg-zinc-800/20 animate-pulse" />
           </div>
           <div>
-            <h1 className="text-xl font-bold leading-none text-on-surface tracking-tight">Vector</h1>
-            <p className="text-[9px] font-bold text-emerald-500/80 uppercase tracking-[0.2em] mt-0.5">AI Command Center</p>
+            <h1 className="text-xl font-bold leading-none text-on-surface tracking-tight">Crayon</h1>
+            <p className="text-[9px] font-bold text-zinc-300/80 uppercase tracking-[0.2em] mt-0.5">AI Command Center</p>
           </div>
         </div>
         {/* Close button for mobile */}
@@ -62,10 +62,13 @@ export function Sidebar() {
       </div>
 
       {/* System Status */}
-      <div className="mx-2 mb-6 px-3 py-2.5 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
+      <div className="mx-2 mb-6 px-3 py-2.5 rounded-lg bg-zinc-800/5 border border-zinc-600/10">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)] animate-pulse" />
-          <span className="text-[10px] font-semibold text-emerald-500/90 uppercase tracking-wider">All Systems Operational</span>
+          <span className="w-2 h-2 rounded-full bg-zinc-400 shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-pulse" />
+          <div className="flex flex-col">
+            <span className="text-[10px] font-semibold text-zinc-300/90 uppercase tracking-wider">Crayon OS v2.4.1</span>
+            <span className="text-[8px] font-medium text-zinc-500 uppercase tracking-wider">Enterprise Systems Nominal</span>
+          </div>
         </div>
       </div>
 
@@ -85,18 +88,18 @@ export function Sidebar() {
                   ? "bg-surface-container-high/80 text-on-surface shadow-sm" 
                   : (item as any).highlight 
                     ? (item as any).aicoo
-                      ? "text-cyan-500 hover:bg-cyan-500/8 hover:text-cyan-400 font-semibold"
-                      : "text-emerald-500 hover:bg-emerald-500/8 hover:text-emerald-400 font-semibold"
+                      ? "text-zinc-300 hover:bg-zinc-800/8 hover:text-zinc-300 font-semibold"
+                      : "text-zinc-300 hover:bg-zinc-800/8 hover:text-zinc-300 font-semibold"
                     : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50"
               }`}
             >
               {isActive && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-emerald-500 rounded-r-full shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-white rounded-r-full shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
               )}
-              <Icon className={`w-[18px] h-[18px] transition-all duration-200 ${isActive ? 'text-emerald-500 scale-110' : 'group-hover:scale-110'}`} />
+              <Icon className={`w-[18px] h-[18px] transition-all duration-200 ${isActive ? 'text-zinc-300 scale-110' : 'group-hover:scale-110'}`} />
               <span className="text-[13px] tracking-wide">{item.name}</span>
               {(item as any).highlight && !isActive && (
-                <Sparkles className="w-3 h-3 text-emerald-500/50 ml-auto" />
+                <Sparkles className="w-3 h-3 text-zinc-300/50 ml-auto" />
               )}
             </Link>
           );
@@ -106,19 +109,19 @@ export function Sidebar() {
       {/* Version & User Profile */}
       <div className="mt-auto pt-4 border-t border-outline-variant/30 space-y-3">
         <div className="flex items-center gap-3 px-3 py-3 bg-surface-container/50 rounded-xl border border-outline-variant/30 hover:bg-surface-container hover:border-outline-variant/60 transition-all cursor-pointer group">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-violet-500/15 relative">
-            <span className="group-hover:hidden text-xs">VA</span>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-zinc-400 to-zinc-950 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-black/15 relative border border-zinc-600/50">
+            <span className="group-hover:hidden text-xs">CR</span>
             <Settings className="w-4 h-4 hidden group-hover:block" />
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-surface" />
+            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-zinc-800 rounded-full border-2 border-surface" />
           </div>
           <div className="flex-1 overflow-hidden">
-            <h4 className="text-sm font-semibold text-on-surface truncate">Vector Admin</h4>
-            <p className="text-[10px] text-on-surface-variant/60 truncate">admin@vector-ai.com</p>
+            <h4 className="text-sm font-semibold text-on-surface truncate">Crayon Admin</h4>
+            <p className="text-[10px] text-on-surface-variant/60 truncate">admin@crayon.com</p>
           </div>
         </div>
 
         <div className="px-3 py-1.5 text-center">
-          <span className="text-[9px] font-medium text-on-surface-variant/30 tracking-widest uppercase">Vector v2.0 • 19 Agents • Aicoo</span>
+          <span className="text-[9px] font-medium text-on-surface-variant/30 tracking-widest uppercase">Crayon v2.0 • 19 Agents • Aicoo</span>
         </div>
       </div>
     </>

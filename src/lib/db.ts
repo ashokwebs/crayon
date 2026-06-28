@@ -1,115 +1,136 @@
-import { Pool } from 'pg';
+import mongoose from 'mongoose';
 
-let pool: Pool | null = null;
+// Ensure we only initialize the connection once in Next.js development
+declare global {
+  var mongoose: {
+    conn: mongoose.Connection | null;
+    promise: Promise<mongoose.Connection> | null;
+  };
+}
 
-export function getDbPool() {
-  if (!pool) {
-    // Determine the correct connection string based on where it's running
-    // The user put .env.local in the parent dir, but Next.js usually looks in its root.
-    // For safety, we use process.env.POSTGRES_URL directly
-    const connectionString = process.env.POSTGRES_URL;
-    
-    if (!connectionString) {
-      console.warn("⚠️ POSTGRES_URL is not set in environment variables. Database features will fail silently.");
-      return null;
-    }
+let cached = global.mongoose;
 
-    pool = new Pool({
-      connectionString,
-      ssl: {
-        rejectUnauthorized: false // Required for many managed Postgres services like Supabase/InsForge
-      }
-    });
-  }
-  return pool;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
 export async function initDb() {
-  const p = getDbPool();
-  if (!p) return;
+  const MONGODB_URI = process.env.MONGODB_URI;
+
+  if (!MONGODB_URI) {
+    console.warn("⚠️ MONGODB_URI is not set in environment variables. Database features will fail.");
+    return null;
+  }
+
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 3000,
+    };
+
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log("✅ MongoDB initialized successfully.");
+      return mongoose.connection;
+    }).catch(async (err) => {
+      console.warn("⚠️ Failed to connect to remote MongoDB Atlas. Falling back to local in-memory DB...");
+      try {
+        const { MongoMemoryServer } = await import('mongodb-memory-server');
+        const mongod = await MongoMemoryServer.create();
+        const uri = mongod.getUri();
+        const fallbackMongoose = await mongoose.connect(uri, opts);
+        console.log("✅ Fallback Local MongoDB initialized successfully.");
+        return fallbackMongoose.connection;
+      } catch (fallbackErr) {
+        console.error("❌ Failed to initialize fallback MongoDB:", fallbackErr);
+        throw fallbackErr;
+      }
+    });
+  }
 
   try {
-    // 1. Enable pgvector extension (must be done before creating vector columns)
-    await p.query(`CREATE EXTENSION IF NOT EXISTS vector;`);
-
-    // 2. Create the projects table
-    await p.query(`
-      CREATE TABLE IF NOT EXISTS projects (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        description TEXT,
-        status VARCHAR(50) DEFAULT 'Active',
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        summary_markdown TEXT,
-        architecture_markdown TEXT,
-        marketing_markdown TEXT,
-        finance_markdown TEXT
-      );
-    `);
-
-    // 3. Create the knowledge_base table for RAG
-    await p.query(`
-      CREATE TABLE IF NOT EXISTS knowledge_base (
-        id SERIAL PRIMARY KEY,
-        filename VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL,
-        embedding vector(768),
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
-
-    // 4. Create project_memory table
-    await p.query(`
-      CREATE TABLE IF NOT EXISTS project_memory (
-        id VARCHAR(255) PRIMARY KEY,
-        project_id VARCHAR(255) NOT NULL,
-        category VARCHAR(50) NOT NULL,
-        agent_id VARCHAR(100),
-        agent_name VARCHAR(100),
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        metadata JSONB
-      );
-    `);
-
-    // 5. Create agent_tasks table
-    await p.query(`
-      CREATE TABLE IF NOT EXISTS agent_tasks (
-        id VARCHAR(255) PRIMARY KEY,
-        project_id VARCHAR(255) NOT NULL,
-        agent_id VARCHAR(100) NOT NULL,
-        agent_name VARCHAR(100),
-        task_desc TEXT NOT NULL,
-        priority VARCHAR(20) DEFAULT 'medium',
-        status VARCHAR(50) DEFAULT 'pending',
-        dependencies JSONB,
-        output TEXT,
-        external_route_org VARCHAR(255),
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        completed_at TIMESTAMP WITH TIME ZONE
-      );
-    `);
-
-    // 6. Create aicoo_messages table
-    await p.query(`
-      CREATE TABLE IF NOT EXISTS aicoo_messages (
-        id VARCHAR(255) PRIMARY KEY,
-        from_agent_id VARCHAR(100),
-        from_agent_name VARCHAR(100),
-        from_org VARCHAR(255),
-        to_agent_id VARCHAR(100),
-        to_agent_name VARCHAR(100),
-        to_org VARCHAR(255),
-        content TEXT,
-        type VARCHAR(50),
-        timestamp BIGINT,
-        metadata JSONB
-      );
-    `);
-
-    console.log("✅ Database initialized successfully (including pgvector, memory, and tasks)");
-  } catch (error) {
-    console.error("❌ Failed to initialize database:", error);
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
   }
+
+  return cached.conn;
 }
+
+export function getDbPool() {
+  return cached.conn; // Returns the mongoose connection or null if not yet connected
+}
+
+// ----------------------------------------------------------------------------
+// Mongoose Schemas & Models
+// ----------------------------------------------------------------------------
+
+const ProjectSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: String,
+  status: { type: String, default: 'Active' },
+  summary_markdown: String,
+  architecture_markdown: String,
+  marketing_markdown: String,
+  finance_markdown: String,
+  chat_history: String, // Stringified JSON
+}, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
+
+const KnowledgeBaseSchema = new mongoose.Schema({
+  filename: { type: String, required: true },
+  content: { type: String, required: true },
+  // Remove pgvector embedding since we are in MongoDB. We'll simulate search if needed or use basic text search.
+  // For Atlas Crayon Search, you'd store the embedding as an array of numbers.
+  embedding: [Number], 
+}, { timestamps: { createdAt: 'created_at' } });
+KnowledgeBaseSchema.index({ content: 'text', filename: 'text' }); // Add basic text search index
+
+const ProjectMemorySchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  project_id: { type: String, required: true },
+  category: { type: String, required: true },
+  agent_id: String,
+  agent_name: String,
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  metadata: mongoose.Schema.Types.Mixed,
+}, { timestamps: { createdAt: 'created_at' } });
+
+const AgentTaskSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  project_id: { type: String, required: true },
+  agent_id: { type: String, required: true },
+  agent_name: String,
+  task_desc: { type: String, required: true },
+  priority: { type: String, default: 'medium' },
+  status: { type: String, default: 'pending' },
+  dependencies: mongoose.Schema.Types.Mixed, // JSON
+  output: String,
+  external_route_org: String,
+  completed_at: Date,
+}, { timestamps: { createdAt: 'created_at' } });
+
+const AicooMessageSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  from_agent_id: String,
+  from_agent_name: String,
+  from_org: String,
+  to_agent_id: String,
+  to_agent_name: String,
+  to_org: String,
+  content: String,
+  type: String,
+  timestamp: Number,
+  metadata: mongoose.Schema.Types.Mixed,
+});
+
+// Export Models
+export const ProjectModel = mongoose.models.Project || mongoose.model('Project', ProjectSchema);
+export const KnowledgeBaseModel = mongoose.models.KnowledgeBase || mongoose.model('KnowledgeBase', KnowledgeBaseSchema);
+export const ProjectMemoryModel = mongoose.models.ProjectMemory || mongoose.model('ProjectMemory', ProjectMemorySchema);
+export const AgentTaskModel = mongoose.models.AgentTask || mongoose.model('AgentTask', AgentTaskSchema);
+export const AicooMessageModel = mongoose.models.AicooMessage || mongoose.model('AicooMessage', AicooMessageSchema);

@@ -11,7 +11,7 @@ export async function GET() {
       project_id: "PRJ-NEXUS",
       idea: "Create a Zero-Trust Security Architecture for enterprise B2B SaaS applications.",
       status: "completed",
-      final_strategy: "### Executive Summary\nSuccessfully designed a zero-trust model utilizing JWT with rotating asymmetric keys.\n\n### Key Deliverables\n- **Edge Gateway:** Next.js Serverless runtime\n- **Authentication:** OAuth2 with mandatory MFA\n- **Database:** InsForge Postgres with Row-Level Security."
+      final_strategy: "### Executive Summary\nSuccessfully designed a zero-trust model utilizing JWT with rotating asymmetric keys.\n\n### Key Deliverables\n- **Edge Gateway:** Next.js Serverless runtime\n- **Authentication:** OAuth2 with mandatory MFA\n- **Database:** Aicoo Postgres with Row-Level Security."
     },
     {
       _id: "mock-session-2",
@@ -27,7 +27,7 @@ export async function GET() {
       project_id: "PRJ-NOVA",
       idea: "Upgrade the NovaVault AI assistant with context-aware, portfolio-synced financial reasoning.",
       status: "completed",
-      final_strategy: "### Executive Summary\nIntegrated a Retrieval-Augmented Generation (RAG) pipeline to cross-reference official SEC filings with the user's live portfolio.\n\n### Key Deliverables\n- **Database:** pgvector in InsForge Postgres for similarity search.\n- **Payments:** Full-stack Stripe integration for subscription management.\n- **Compliance:** Strict 'Financial Co-Pilot' guardrails implemented."
+      final_strategy: "### Executive Summary\nIntegrated a Retrieval-Augmented Generation (RAG) pipeline to cross-reference official SEC filings with the user's live portfolio.\n\n### Key Deliverables\n- **Database:** pgvector in Aicoo Postgres for similarity search.\n- **Payments:** Full-stack Stripe integration for subscription management.\n- **Compliance:** Strict 'Financial Co-Pilot' guardrails implemented."
     },
     {
       _id: "mock-session-5",

@@ -15,33 +15,33 @@ export interface DemoEvent {
 }
 
 const DEMO_SEQUENCE: DemoEvent[] = [
-  { id: '1', time: 0, type: 'state_change', newState: 'initializing', message: 'User requested: "Build an AI Education Startup"' },
-  { id: '2', time: 1000, type: 'agent_active', agentId: 'prism', message: 'Architect parsing goal...' },
-  { id: '3', time: 2500, type: 'state_change', newState: 'planning', message: 'Breaking goal into 4 core tracks' },
-  { id: '4', time: 4000, type: 'task_created', agentId: 'nexus', message: 'Task assigned: Technical Architecture' },
-  { id: '5', time: 4500, type: 'task_created', agentId: 'vanguard', message: 'Task assigned: Go-to-market Strategy' },
-  { id: '6', time: 5000, type: 'task_created', agentId: 'oracle', message: 'Task assigned: Competitor Research' },
-  { id: '7', time: 5500, type: 'task_created', agentId: 'ledger', message: 'Task assigned: Financial Projections' },
+  { id: '1', time: 0, type: 'state_change', newState: 'initializing', message: 'User requested: "Global Port Logistics & Predictive Supply Chain Rebalancing"' },
+  { id: '2', time: 1000, type: 'agent_active', agentId: 'prism', message: 'Architect parsing maritime logistics datasets & real-time telemetry...' },
+  { id: '3', time: 2200, type: 'state_change', newState: 'planning', message: 'Deconstructing global rebalancing into 4 macro-tracks' },
+  { id: '4', time: 3400, type: 'task_created', agentId: 'nexus', message: 'Task assigned: Autonomous IoT Fleet Edge-Compute Architecture' },
+  { id: '5', time: 4400, type: 'task_created', agentId: 'vanguard', message: 'Task assigned: Geopolitical & Stakeholder Crisis Strategy' },
+  { id: '6', time: 5400, type: 'task_created', agentId: 'oracle', message: 'Task assigned: Meteorological & Maritime Risk Modeling' },
+  { id: '7', time: 6400, type: 'task_created', agentId: 'ledger', message: 'Task assigned: Dynamic Tariff & Bunker Fuel Cost Hedging' },
   
-  { id: '8', time: 7000, type: 'state_change', newState: 'executing', message: 'Executive Council active' },
-  { id: '9', time: 8000, type: 'agent_active', agentId: 'vanguard', message: 'CMO requires cinematic branding' },
+  { id: '8', time: 7600, type: 'state_change', newState: 'executing', message: 'Executive Council synchronizing with global datacenters...' },
+  { id: '9', time: 8800, type: 'agent_active', agentId: 'nexus', message: 'CTO requires massive Kubernetes cluster scaling simulation' },
   
-  { id: '10', time: 9500, type: 'state_change', newState: 'external_routing', message: 'Aicoo Network triggered' },
-  { id: '11', time: 10000, type: 'aicoo_route', agentId: 'vanguard', targetOrgId: 'brandforge', message: 'Routing branding task to BrandForge Agency' },
-  { id: '12', time: 12000, type: 'aicoo_route', agentId: 'nexus', targetOrgId: 'securevault', message: 'Routing security audit to SecureVault' },
+  { id: '10', time: 10000, type: 'state_change', newState: 'external_routing', message: 'Aicoo Network triggered for specialized domain expertise' },
+  { id: '11', time: 11200, type: 'aicoo_route', agentId: 'nexus', targetOrgId: 'cloudscale', message: 'Routing K8s scaling simulation to CloudScale Infrastructure' },
+  { id: '12', time: 12400, type: 'aicoo_route', agentId: 'oracle', targetOrgId: 'datapulse', message: 'Routing meteorological risk forecasting to Apex Financial Auditors' },
   
-  { id: '13', time: 15000, type: 'aicoo_response', agentId: 'vanguard', targetOrgId: 'brandforge', message: 'BrandForge: Initial moodboards delivered' },
-  { id: '14', time: 16500, type: 'deliverable_added', agentId: 'vanguard', message: 'Brand Identity Guidelines' },
+  { id: '13', time: 13800, type: 'aicoo_response', agentId: 'nexus', targetOrgId: 'cloudscale', message: 'CloudScale: Spot instance strategy optimized for 40% cost reduction' },
+  { id: '14', time: 14800, type: 'deliverable_added', agentId: 'nexus', message: 'K8s Multi-Region Topology Map' },
   
-  { id: '15', time: 18000, type: 'aicoo_response', agentId: 'nexus', targetOrgId: 'securevault', message: 'SecureVault: Audit complete, zero critical vulns' },
-  { id: '16', time: 19500, type: 'deliverable_added', agentId: 'nexus', message: 'Architecture & Security Spec' },
+  { id: '15', time: 16000, type: 'aicoo_response', agentId: 'oracle', targetOrgId: 'datapulse', message: 'Apex: El Niño probability adjusted. Rerouting Pacific cargo lines.' },
+  { id: '16', time: 17000, type: 'deliverable_added', agentId: 'oracle', message: 'Predictive Meteorological Routing Engine' },
   
-  { id: '17', time: 21000, type: 'deliverable_added', agentId: 'oracle', message: 'EdTech Market Analysis' },
-  { id: '18', time: 22000, type: 'deliverable_added', agentId: 'ledger', message: '5-Year Revenue Model' },
+  { id: '17', time: 18200, type: 'deliverable_added', agentId: 'vanguard', message: 'Geopolitical Risk Mitigation Protocol' },
+  { id: '18', time: 19400, type: 'deliverable_added', agentId: 'ledger', message: 'Automated Fuel Hedging Smart Contracts' },
   
-  { id: '19', time: 23500, type: 'state_change', newState: 'compiling', message: 'Architect compiling final Master Plan' },
-  { id: '20', time: 26000, type: 'deliverable_added', agentId: 'prism', message: 'Project Vector — Master Execution Plan' },
-  { id: '21', time: 28000, type: 'state_change', newState: 'completed', message: 'Orchestration Complete' },
+  { id: '19', time: 20600, type: 'state_change', newState: 'compiling', message: 'Architect compiling master supply chain rebalancing executable' },
+  { id: '20', time: 22000, type: 'deliverable_added', agentId: 'prism', message: 'Project Leviathan — Master Execution Plan' },
+  { id: '21', time: 23500, type: 'state_change', newState: 'completed', message: 'Global Orchestration Complete' },
 ];
 
 export function useDemoOrchestrator(isPlaying: boolean, onEvent: (event: DemoEvent) => void) {
@@ -78,5 +78,5 @@ export function useDemoOrchestrator(isPlaying: boolean, onEvent: (event: DemoEve
     setEventIndex(0);
   };
 
-  return { currentTime, progress: Math.min(100, (currentTime / 28000) * 100), reset };
+  return { currentTime, progress: Math.min(100, (currentTime / 23500) * 100), reset };
 }

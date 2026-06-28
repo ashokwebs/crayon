@@ -1,5 +1,5 @@
 import type { ProjectMemoryEntry, MemoryCategory } from './types';
-import { getDbPool } from '../db';
+import { initDb, ProjectMemoryModel } from '../db';
 import { v4 as uuidv4 } from 'uuid';
 
 export class MemoryService {
@@ -14,27 +14,20 @@ export class MemoryService {
     };
 
     try {
-      const pool = getDbPool();
-      if (!pool) throw new Error("Database pool not initialized");
-
-      await pool.query(
-        `INSERT INTO project_memory 
-         (id, project_id, category, agent_id, agent_name, title, content, created_at, metadata)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-        [
-          entry.id, 
-          entry.projectId, 
-          entry.category, 
-          entry.agentId || null, 
-          entry.agentName || null, 
-          entry.title, 
-          entry.content, 
-          new Date(entry.createdAt).toISOString(),
-          entry.metadata ? JSON.stringify(entry.metadata) : null
-        ]
-      );
+      await initDb();
+      
+      await ProjectMemoryModel.create({
+        id: entry.id,
+        project_id: entry.projectId,
+        category: entry.category,
+        agent_id: entry.agentId || null,
+        agent_name: entry.agentName || null,
+        title: entry.title,
+        content: entry.content,
+        metadata: entry.metadata || null
+      });
     } catch (e) {
-      console.warn("Failed to persist memory entry to DB, falling back to in-memory/simulated", e);
+      console.warn("Failed to persist memory entry to MongoDB, falling back to in-memory/simulated", e);
     }
     
     return entry;
@@ -45,15 +38,11 @@ export class MemoryService {
    */
   async getProjectMemory(projectId: string): Promise<ProjectMemoryEntry[]> {
     try {
-      const pool = getDbPool();
-      if (!pool) return [];
-
-      const res = await pool.query(
-        `SELECT * FROM project_memory WHERE project_id = $1 ORDER BY created_at ASC`,
-        [projectId]
-      );
+      await initDb();
       
-      return res.rows.map(row => ({
+      const res = await ProjectMemoryModel.find({ project_id: projectId }).sort({ created_at: 1 });
+      
+      return res.map(row => ({
         id: row.id,
         projectId: row.project_id,
         category: row.category as MemoryCategory,
@@ -61,11 +50,11 @@ export class MemoryService {
         agentName: row.agent_name,
         title: row.title,
         content: row.content,
-        createdAt: new Date(row.created_at).getTime(),
+        createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
         metadata: row.metadata,
       }));
     } catch (e) {
-      console.warn("Failed to fetch memory from DB, returning empty array", e);
+      console.warn("Failed to fetch memory from MongoDB, returning empty array", e);
       return [];
     }
   }

@@ -1,20 +1,20 @@
 <div align="center">
-  <img src="./assets/logo.png" alt="Vector Logo" width="120" />
-  <h1>Vector AI Command Center</h1>
+  <img src="./assets/logo.png" alt="Crayon Logo" width="120" />
+  <h1>Crayon AI Command Center</h1>
   <p>Your Autonomous Digital C-Suite.</p>
   <p>
-    <a href="https://vector-ai.vercel.app"><img src="https://img.shields.io/badge/Deploy_to-Vercel-black?style=flat-square&logo=vercel" alt="Deploy to Vercel"></a>
+    <a href="https://crayon-ai.vercel.app"><img src="https://img.shields.io/badge/Deploy_to-Vercel-black?style=flat-square&logo=vercel" alt="Deploy to Vercel"></a>
     <img src="https://img.shields.io/badge/Next.js-16.2.7-black?style=flat-square&logo=next.js" alt="Next.js">
-    <a href="https://insforge.dev"><img src="https://insforge.dev/badge-made-with-insforge-dark.svg" alt="Made with InsForge" height="20"></a>
+    <a href="https://aicoo.dev"><img src="https://aicoo.dev/badge-made-with-aicoo-dark.svg" alt="Made with Aicoo" height="20"></a>
     <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License">
   </p>
 </div>
 
 ---
 
-**Vector** is a multi-agent SaaS platform designed to act as your enterprise AI executive council. Whether you need startup ideation, zero-trust cloud architecture, fintech modeling, or viral go-to-market strategies, Vector puts a full AI C-suite at your fingertips, allowing you to build entire startups in seconds.
+**Crayon** is a multi-agent SaaS platform designed to act as your enterprise AI executive council. Whether you need startup ideation, zero-trust cloud architecture, fintech modeling, or viral go-to-market strategies, Crayon puts a full AI C-suite at your fingertips, allowing you to build entire startups in seconds.
 
-Built with a lightning-fast **Next.js 16** frontend, powered by **Google Gemini 2.5 Flash**, and natively integrated with **InsForge PostgreSQL** for persistent memory.
+Built with a lightning-fast **Next.js 16** frontend, powered by **Google Gemini 2.5 Flash**, and natively integrated with **Aicoo PostgreSQL** for persistent memory.
 
 ## ✨ The Executive Council
 
@@ -28,7 +28,7 @@ Built with a lightning-fast **Next.js 16** frontend, powered by **Google Gemini 
 
 - **Instantaneous Cinematic UI**: A premium, glassmorphism dashboard featuring highly reactive agent status cards, buttery-smooth Framer Motion staggered animations, and zero-latency document rendering.
 - **Autonomous Project Architecting**: The AI automatically generates crisp, contextual titles (e.g., "Retro TV SaaS") and builds massive, production-ready markdown documents (Executive Summaries, Architecture Specs, GTM Plans) seamlessly stored in the database.
-- **Agent-Native Memory (InsForge)**: Natively integrated with **InsForge PostgreSQL** utilizing `pgvector`. Chat histories, massive project hierarchies, and contextual embeddings are permanently saved across sessions.
+- **Agent-Native Memory (Aicoo)**: Natively integrated with **Aicoo PostgreSQL** utilizing `pgvector`. Chat histories, massive project hierarchies, and contextual embeddings are permanently saved across sessions.
 - **Zero-Trust Data Scrubbing**: Built for enterprise. Strict context routing ensures that the Finance agent doesn't overwrite the CTO's architecture notes.
 
 ## 🛠 Tech Stack
@@ -37,7 +37,7 @@ Built with a lightning-fast **Next.js 16** frontend, powered by **Google Gemini 
 - **Framework**: Next.js 16 (App Router, Turbopack)
 - **Styling**: Tailwind CSS, Framer Motion, Cinematic UI Tokens
 - **AI Engine**: Google Gemini 2.5 Flash (`@google/generative-ai`)
-- **Database & Memory**: **InsForge PostgreSQL** (pgvector for RAG)
+- **Database & Memory**: **Aicoo PostgreSQL** (pgvector for RAG)
 - **Deployment**: Vercel
 
 ---
@@ -48,14 +48,14 @@ Built to be completely serverless.
 
 ### Prerequisites
 - Node.js 18+
-- PostgreSQL Database (via InsForge or Supabase)
+- PostgreSQL Database (via Aicoo or Supabase)
 - Google Gemini API Key
 
 ### 1. Installation
 Clone the repository and install the Next.js dependencies:
 ```bash
-git clone https://github.com/a-sweet-debug/the-vector.git
-cd the-vector
+git clone https://github.com/a-sweet-debug/the-crayon.git
+cd the-crayon
 npm install
 ```
 

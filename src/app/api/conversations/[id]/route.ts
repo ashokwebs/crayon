@@ -1,106 +1,95 @@
-import { NextResponse } from 'next/server';
-import { getDbPool, initDb } from '@/lib/db';
-
-let dbInitialized = false;
+import { NextResponse } from "next/server";
+import { initDb, ProjectModel } from "@/lib/db";
+import { AGENTS } from "@/lib/agents/registry";
 
 export async function GET(
-  request: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-
   try {
-    if (!dbInitialized) {
-      await initDb();
-      dbInitialized = true;
-    }
+    await initDb();
 
-    const pool = getDbPool();
-    if (!pool) {
-      throw new Error("Database not connected");
-    }
-
-    // Parse the numeric ID from 'db-1', 'db-2', etc.
-    const numericId = id.replace('db-', '');
-    
-    if (!numericId || isNaN(Number(numericId))) {
+    // Check if local dev mock
+    if (id.startsWith('local-')) {
       return NextResponse.json({
-        messages: [{ role: 'assistant', content: "Invalid project ID." }]
+        id: id,
+        messages: [
+          { role: 'user', content: 'Mock conversation loaded.' },
+          { role: 'assistant', content: 'Since no database is connected, history is not saved.' }
+        ],
+        documents: []
       });
     }
 
-    const result = await pool.query(
-      'SELECT title, description, chat_history, summary_markdown, architecture_markdown, marketing_markdown, finance_markdown FROM projects WHERE id = $1',
-      [numericId]
-    );
+    const projectId = id.replace('db-', '');
+    const project = await ProjectModel.findById(projectId);
 
-    if (result.rows.length === 0) {
-      return NextResponse.json({
-        messages: [{ role: 'assistant', content: "Project not found in InsForge database." }]
-      });
+    if (!project) {
+      return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
     }
 
-    const p = result.rows[0];
-
-    // Reconstruct the chat history from the saved data or fallback
-    let messages = p.chat_history;
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      messages = [
-        { role: "user", content: p.description || "Start a project..." },
-        { role: "assistant", content: `I have restored the **${p.title}** project from the InsForge database. All generated documents are available below.` }
-      ];
-    }
-
-    // Reconstruct the documents so the UI can render them
     const documents = [];
-    if (p.summary_markdown) documents.push({ title: "Executive Summary", content: p.summary_markdown });
-    if (p.architecture_markdown) documents.push({ title: "Architecture Spec", content: p.architecture_markdown });
-    if (p.marketing_markdown) documents.push({ title: "GTM Strategy", content: p.marketing_markdown });
-    if (p.finance_markdown) documents.push({ title: "Financial Model", content: p.finance_markdown });
+    if (project.summary_markdown) {
+      documents.push({
+        title: "Executive Summary",
+        agent: AGENTS.find(a => a.id === "atlas")?.name || "Atlas",
+        content: project.summary_markdown
+      });
+    }
+    if (project.architecture_markdown) {
+      documents.push({
+        title: "Technical Architecture",
+        agent: AGENTS.find(a => a.id === "nexus")?.name || "Nexus",
+        content: project.architecture_markdown
+      });
+    }
+    if (project.marketing_markdown) {
+      documents.push({
+        title: "Go-to-Market Strategy",
+        agent: AGENTS.find(a => a.id === "vanguard")?.name || "Vanguard",
+        content: project.marketing_markdown
+      });
+    }
+    if (project.finance_markdown) {
+      documents.push({
+        title: "Financial Projections",
+        agent: AGENTS.find(a => a.id === "ledger")?.name || "Ledger",
+        content: project.finance_markdown
+      });
+    }
 
     return NextResponse.json({
-      title: p.title,
-      messages: messages,
-      documents: documents
+      id: id,
+      messages: project.chat_history ? JSON.parse(project.chat_history) : [],
+      documents
     });
-
-  } catch (error) {
-    console.error("Failed to load project from InsForge:", error);
-    return NextResponse.json({
-      messages: [{ role: 'assistant', content: "Failed to connect to InsForge database." }]
-    });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-export async function PATCH(
-  request: Request,
+export async function DELETE(
+  req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   try {
-    const { title } = await request.json();
-    if (!title) {
-      return NextResponse.json({ error: "Missing title" }, { status: 400 });
+    await initDb();
+    
+    if (id.startsWith('local-')) {
+      return NextResponse.json({ success: true });
     }
 
-    if (!dbInitialized) {
-      await initDb();
-      dbInitialized = true;
+    const projectId = id.replace('db-', '');
+    const result = await ProjectModel.findByIdAndDelete(projectId);
+    
+    if (!result) {
+      return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
     }
-
-    const pool = getDbPool();
-    if (!pool) throw new Error("Database not connected");
-
-    const numericId = id.replace('db-', '');
-    if (!numericId || isNaN(Number(numericId))) {
-      return NextResponse.json({ error: "Invalid project ID." }, { status: 400 });
-    }
-
-    await pool.query('UPDATE projects SET title = $1 WHERE id = $2', [title, numericId]);
-
-    return NextResponse.json({ success: true, title });
-  } catch (error) {
-    console.error("Failed to rename project:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
