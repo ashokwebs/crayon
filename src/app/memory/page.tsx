@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Database, Search, ArrowRight, Zap, X, Code2, ShieldCheck, Target, TrendingUp, Cpu } from "lucide-react";
+import { Database, Search, ArrowRight, Zap, X, Code2, ShieldCheck, Target, TrendingUp, Cpu, Brain, Network, Clock } from "lucide-react";
 
 // Generate mock vector data
 const generateVectors = () => {
@@ -94,7 +94,75 @@ export default function MemoryMatrixPage() {
         </div>
       </motion.div>
 
-      <div className="flex-1 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl overflow-hidden relative shadow-inner p-8 flex flex-col">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
+        {/* Left Column: Non-Technical Explainer & Stats */}
+        <div className="lg:col-span-4 flex flex-col gap-6 overflow-y-auto pr-2">
+          
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="premium-card rounded-2xl p-6">
+            <h3 className="text-lg font-bold text-on-surface mb-3 flex items-center gap-2">
+              <Brain className="w-5 h-5 text-indigo-400" />
+              What is the Memory Matrix?
+            </h3>
+            <p className="text-sm text-on-surface-variant/80 leading-relaxed mb-4">
+              Think of this as the long-term brain of the AI. Instead of reading words, the AI converts concepts into coordinates in a massive digital space. Closely related ideas group together in "clusters".
+            </p>
+            <p className="text-sm text-on-surface-variant/80 leading-relaxed">
+              When you ask a question, the AI instantly finds the nearest cluster of knowledge to give you a highly accurate, context-aware answer without needing to re-read your entire history.
+            </p>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="premium-card rounded-2xl p-6">
+            <h3 className="text-sm font-bold text-on-surface mb-4 uppercase tracking-wider text-zinc-400">Business Impact</h3>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-zinc-800/50 flex items-center justify-center"><Network className="w-4 h-4 text-emerald-400" /></div>
+                  <span className="text-sm font-medium text-zinc-300">Concepts Indexed</span>
+                </div>
+                <span className="text-base font-bold text-white">14,204</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-zinc-800/50 flex items-center justify-center"><Clock className="w-4 h-4 text-indigo-400" /></div>
+                  <span className="text-sm font-medium text-zinc-300">Time Saved (Recall)</span>
+                </div>
+                <span className="text-base font-bold text-white">4,200 hrs</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-zinc-800/50 flex items-center justify-center"><Target className="w-4 h-4 text-rose-400" /></div>
+                  <span className="text-sm font-medium text-zinc-300">Context Accuracy</span>
+                </div>
+                <span className="text-base font-bold text-white">99.8%</span>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="premium-card rounded-2xl p-6 flex-1 min-h-[250px] flex flex-col">
+            <h3 className="text-sm font-bold text-on-surface mb-4 uppercase tracking-wider text-zinc-400">Recent Memories Formed</h3>
+            <div className="flex-1 overflow-y-auto pr-2 space-y-3">
+              {[
+                { time: "2 mins ago", text: "Learned the Q3 Marketing Strategy from Vanguard" },
+                { time: "15 mins ago", text: "Memorized the new API endpoints for Stripe Webhooks" },
+                { time: "1 hour ago", text: "Processed 42 pages of SEC Filings for Ledger" },
+                { time: "3 hours ago", text: "Mapped the Kubernetes Pod Scaling architecture" },
+                { time: "5 hours ago", text: "Ingested the Zero-Trust Security Policy guidelines" },
+              ].map((feed, idx) => (
+                <div key={idx} className="flex gap-3 items-start">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-2 shrink-0 shadow-[0_0_5px_#818cf8]" />
+                  <div>
+                    <p className="text-xs text-zinc-300 leading-snug">{feed.text}</p>
+                    <p className="text-[10px] text-zinc-500 font-mono mt-0.5">{feed.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+        </div>
+
+        {/* Right Column: The Matrix */}
+        <div className="lg:col-span-8 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl overflow-hidden relative shadow-inner p-8 flex flex-col min-h-[500px]">
         {/* Holographic grid background */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(99,102,241,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.05)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
         
@@ -133,6 +201,7 @@ export default function MemoryMatrixPage() {
             <div className="w-full text-center text-zinc-500 mt-20 font-mono text-sm">NO SEMANTIC MATCHES DETECTED IN CLUSTER.</div>
           )}
         </div>
+      </div>
       </div>
 
       {/* Floating Context Tooltip */}
