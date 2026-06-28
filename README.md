@@ -28,6 +28,8 @@ Built with a lightning-fast **Next.js 16** frontend, powered by **Google Gemini 
 ## 🚀 Key Features
 
 - **Instantaneous Cinematic UI**: A premium, glassmorphism dashboard featuring highly reactive agent status cards, buttery-smooth Framer Motion staggered animations, and zero-latency document rendering.
+- **Prism Terminal (Live Streaming AI)**: A secure shell interface directly wired into the Gemini 2.5 Flash API. Experience live, character-by-character SSE streaming of AI responses with robust offline mock simulation fallbacks.
+- **Global Cluster Telemetry**: An executive-grade monitoring dashboard featuring a Server Topology Matrix tracking live resource allocations across core nodes.
 - **Autonomous Project Architecting**: The AI automatically generates crisp, contextual titles and builds massive, production-ready markdown documents (Executive Summaries, Architecture Specs, GTM Plans) seamlessly stored in the database.
 - 🧠 **Agent-Native Memory (Powered by AICOO)**: Natively integrated with **AICOO PostgreSQL** utilizing `pgvector`. Chat histories, massive project hierarchies, and contextual embeddings are permanently saved across sessions using AICOO's robust infrastructure.
 - **Zero-Trust Data Scrubbing**: Built for enterprise. Strict context routing ensures that the Finance agent doesn't overwrite the CTO's architecture notes.
