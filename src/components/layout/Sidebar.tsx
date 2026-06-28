@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, FolderOpen, Bot, LineChart, CreditCard, Network, History, Settings, X, Cpu, Sparkles, Zap, Database, Globe, Play, GitBranch, MessageSquare } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Bot, LineChart, CreditCard, Network, History, Settings, X, Cpu, Sparkles, Zap, Database, Globe, Play, GitBranch, MessageSquare, Terminal as TerminalIcon, Activity } from "lucide-react";
 import { clsx } from "clsx";
 
 export function Sidebar() {
@@ -26,6 +26,9 @@ export function Sidebar() {
     { name: "Dashboard", icon: LayoutDashboard, href: "/" },
     { name: "Board Room", icon: Bot, href: "/boardroom", highlight: true },
     { name: "Aicoo Network", icon: Globe, href: "/aicoo", highlight: true, aicoo: true },
+    { name: "Telemetry", icon: Activity, href: "/telemetry", highlight: true },
+    { name: "Memory Matrix", icon: Database, href: "/memory" },
+    { name: "Prism Terminal", icon: TerminalIcon, href: "/terminal", highlight: true },
     { name: "Org Chart", icon: GitBranch, href: "/orgchart" },
     { name: "Projects", icon: FolderOpen, href: "/projects" },
     { name: "Agents", icon: Cpu, href: "/agents" },

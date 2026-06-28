@@ -35,10 +35,13 @@ export function AicooLiveFeed({ active = true, isCompleted = false, speedMs = 30
     { from: "Nexus", to: "Vanguard", action: "VERIFY_SEC", payload: "Checking compliance on proposed infra.", status: "pending" },
     { from: "Vanguard", to: "Nexus", action: "SEC_WARNING", payload: "Port 3000 vulnerable. Rewriting policy.", status: "warning" },
     { from: "Nexus", to: "Prism", action: "RES_SYS_DESIGN", payload: "Architecture finalized. Zero trust applied.", status: "success" },
-    { from: "Prism", to: "Ledger", action: "REQ_BUDGET", payload: "Calculate run costs for new infra.", status: "processing" },
-    { from: "Ledger", to: "Prism", action: "RES_BUDGET", payload: "Estimated $14.20/mo. Approved.", status: "success" },
-    { from: "Prism", to: "Echo", action: "REQ_COMM", payload: "Draft stakeholder update.", status: "processing" },
-    { from: "Echo", to: "Prism", action: "RES_COMM", payload: "Update ready. Sentiment: Positive.", status: "success" }
+    { from: "Prism", to: "Vanguard", action: "REQ_GTM", payload: "Draft viral marketing loop.", status: "processing" },
+    { from: "Vanguard", to: "Atlas", action: "REQ_AD_SPEND", payload: "Need 40% increase in Q3 Ad Spend for launch.", status: "pending" },
+    { from: "Atlas", to: "Ledger", action: "VERIFY_BUDGET", payload: "Can we approve 40% Ad Spend increase?", status: "processing" },
+    { from: "Ledger", to: "Atlas", action: "BUDGET_REJECTED", payload: "WARNING: Exceeds quarterly burn rate limits.", status: "warning" },
+    { from: "Prism", to: "System", action: "RESOLVING_CONFLICT", payload: "Executive override. Forcing compromised organic growth loop.", status: "warning" },
+    { from: "Prism", to: "Ledger", action: "REQ_BUDGET", payload: "Calculate run costs for new infra and organic GTM.", status: "processing" },
+    { from: "Ledger", to: "Prism", action: "RES_BUDGET", payload: "Estimated $14.20/mo. Approved.", status: "success" }
   ];
 
   useEffect(() => {

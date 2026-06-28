@@ -5,14 +5,15 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, Terminal, Shield, FileText, Settings, Database, 
-  Cpu, Users, BarChart3, LayoutDashboard, ChevronRight, MessageSquare 
+  Cpu, Users, BarChart3, LayoutDashboard, ChevronRight, MessageSquare, ShieldAlert 
 } from "lucide-react";
 
 type CommandItem = {
   name: string;
-  href: string;
+  href?: string;
   icon: any;
   category: string;
+  action?: string;
 };
 
 const commands: CommandItem[] = [
@@ -25,6 +26,7 @@ const commands: CommandItem[] = [
   { name: "System Architecture", href: "/architecture", icon: Cpu, category: "Documentation" },
   { name: "Knowledge Base", href: "/knowledge", icon: Database, category: "Management" },
   { name: "Platform Settings", href: "/settings", icon: Settings, category: "System" },
+  { name: "Initiate Zero-Trust Lockdown", action: "lockdown", icon: ShieldAlert, category: "System" },
   { name: "Provide Feedback", href: "/feedback", icon: MessageSquare, category: "Support" },
   { name: "Privacy Policy", href: "/privacy", icon: Shield, category: "Support" },
   { name: "Cookie Policy", href: "/cookie", icon: FileText, category: "Support" },
@@ -55,10 +57,14 @@ export function CommandPalette() {
     cmd.category.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleSelect = (href: string) => {
+  const handleSelect = (cmd: CommandItem) => {
     setIsOpen(false);
     setSearch("");
-    router.push(href);
+    if (cmd.action === "lockdown") {
+      window.dispatchEvent(new Event("trigger-lockdown"));
+    } else if (cmd.href) {
+      router.push(cmd.href);
+    }
   };
 
   return (
@@ -103,7 +109,7 @@ export function CommandPalette() {
                   {filteredCommands.map((cmd) => (
                     <button
                       key={cmd.name}
-                      onClick={() => handleSelect(cmd.href)}
+                      onClick={() => handleSelect(cmd)}
                       className="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-surface-container-high/80 text-left transition-colors group"
                     >
                       <div className="flex items-center gap-4">

@@ -6,7 +6,7 @@ import { TopNav } from "@/components/layout/TopNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import { BootSequence } from "@/components/layout/BootSequence";
-
+import { LockdownOverlay } from "@/components/layout/LockdownOverlay";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -38,6 +38,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className={`${inter.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground min-h-screen flex flex-col md:flex-row overflow-x-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <LockdownOverlay />
           <BootSequence />
           <CommandPalette />
           <Sidebar />
