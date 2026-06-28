@@ -41,13 +41,11 @@ export default function TerminalPage() {
     setMessages(prev => [...prev, { id: `msg-${Date.now()}-p`, role: "prism", content: "" }]);
 
     try {
-      const res = await fetch('/api/orchestrator', {
+      const res = await fetch('/api/prism', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          idea: userMsg, 
-          projectName: "Terminal Secure Shell",
-          conversation_id: null // Terminal always spawns a fresh thread or we could persist it
+          idea: userMsg
         })
       });
 
