@@ -38,7 +38,6 @@ export function Sidebar() {
     { name: "Activity", icon: History, href: "/activity" },
     { name: "Knowledge Base", icon: Database, href: "/knowledge" },
     { name: "Demo", icon: Play, href: "/demo", highlight: true },
-    { name: "Settings", icon: Settings, href: "/settings" },
   ];
 
   const sidebarContent = (

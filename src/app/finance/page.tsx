@@ -85,7 +85,7 @@ export default function FinancePage() {
   };
 
   return (
-    <div className="px-6 md:px-12 pb-8 max-w-[1600px] mx-auto h-[calc(100vh-4rem)] flex flex-col pt-8">
+    <div className="px-6 md:px-12 pb-8 max-w-[1600px] mx-auto h-[calc(100vh-4rem)] overflow-hidden flex flex-col pt-8">
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -103,7 +103,7 @@ export default function FinancePage() {
         </button>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 shrink-0">
         
         {/* Metric 1: Burn Rate -> MRR */}
         <motion.div

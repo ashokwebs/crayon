@@ -78,7 +78,11 @@ export default function KnowledgeBasePage() {
   useEffect(() => {
     fetch("/api/knowledge")
       .then(res => res.json())
-      .then(data => setFiles(data.files || []))
+      .then(data => {
+        if (data.files && data.files.length > 0) {
+          setFiles(data.files);
+        }
+      })
       .catch(console.error);
   }, []);
 
