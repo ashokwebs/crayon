@@ -10,6 +10,7 @@ import { DeliverablePanel } from "@/components/demo/DeliverablePanel";
 import { OrgNode } from "@/components/orgchart/OrgNode";
 import { ConnectionLine } from "@/components/orgchart/ConnectionLine";
 import { NeuralBackground } from "@/components/orgchart/NeuralBackground";
+import { DemoSummaryModal } from "@/components/demo/DemoSummaryModal";
 import { getArchitect, getExecutives } from "@/lib/agents/registry";
 import { MOCK_ORGANIZATIONS } from "@/lib/aicoo/mock-data";
 
@@ -160,6 +161,15 @@ export default function DemoPage() {
           </div>
         </div>
       </div>
+      
+      <DemoSummaryModal 
+        isOpen={demoState === 'completed'} 
+        onClose={handleReset} 
+        onRestart={() => {
+          handleReset();
+          setIsPlaying(true);
+        }} 
+      />
     </div>
   );
 }
