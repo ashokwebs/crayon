@@ -20,6 +20,7 @@ export default function TerminalPage() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const lastMockIndexRef = useRef<number>(-1);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -98,7 +99,14 @@ export default function TerminalPage() {
       let mockResponse = "";
       const lower = userMsg.toLowerCase();
       
-      const getRandom = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+      const getRandom = (arr: string[]) => {
+        let newIndex;
+        do {
+          newIndex = Math.floor(Math.random() * arr.length);
+        } while (newIndex === lastMockIndexRef.current && arr.length > 1);
+        lastMockIndexRef.current = newIndex;
+        return arr[newIndex];
+      };
       
       if (lower.includes("/architect") || lower.includes("build") || lower.includes("create")) {
         mockResponse = getRandom([
