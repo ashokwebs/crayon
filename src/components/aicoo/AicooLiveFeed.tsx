@@ -48,9 +48,12 @@ export function AicooLiveFeed({ active = true, isCompleted = false, speedMs = 30
     if (!active) return;
     
     let index = 0;
-    const interval = setInterval(() => {
-      // Randomize latency between 250ms and 1500ms
-      setCurrentLatency(Math.floor(Math.random() * 1250) + 250);
+    let timeoutId: NodeJS.Timeout;
+
+    const tick = () => {
+      // Randomize latency to make it feel slower and more organic (between 800ms and 2500ms)
+      const nextLatency = Math.floor(Math.random() * 1700) + 800;
+      setCurrentLatency(nextLatency);
 
       const scriptItem = DYNAMIC_SCRIPT[index % DYNAMIC_SCRIPT.length];
       
@@ -70,10 +73,14 @@ export function AicooLiveFeed({ active = true, isCompleted = false, speedMs = 30
       });
 
       index++;
-    }, speedMs);
+      timeoutId = setTimeout(tick, nextLatency);
+    };
 
-    return () => clearInterval(interval);
-  }, [active, speedMs]);
+    // Start the loop
+    timeoutId = setTimeout(tick, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [active]);
 
   useEffect(() => {
     if (isCompleted) {
